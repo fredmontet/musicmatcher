@@ -9,6 +9,9 @@
     <feature name="App">
         <param name="android-package" value="org.apache.cordova.App" />
     </feature>
+    <feature name="Geolocation">
+        <param name="android-package" value="org.apache.cordova.geolocation.GeoBroker" />
+    </feature>
     <author email="dev@callback.apache.org" href="http://cordova.io">
         Apache Cordova Team
     </author>

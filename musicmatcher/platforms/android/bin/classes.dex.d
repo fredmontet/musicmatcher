@@ -6,4 +6,9 @@ C:\musicmatcher\platforms\android\bin\classes\com\musicmatcher\app\R$drawable.cl
 C:\musicmatcher\platforms\android\bin\classes\com\musicmatcher\app\R$string.class \
 C:\musicmatcher\platforms\android\bin\classes\com\musicmatcher\app\R$xml.class \
 C:\musicmatcher\platforms\android\bin\classes\com\musicmatcher\app\R.class \
+C:\musicmatcher\platforms\android\bin\classes\org\apache\cordova\geolocation\CordovaLocationListener$LocationTimeoutTask.class \
+C:\musicmatcher\platforms\android\bin\classes\org\apache\cordova\geolocation\CordovaLocationListener.class \
+C:\musicmatcher\platforms\android\bin\classes\org\apache\cordova\geolocation\GeoBroker.class \
+C:\musicmatcher\platforms\android\bin\classes\org\apache\cordova\geolocation\GPSListener.class \
+C:\musicmatcher\platforms\android\bin\classes\org\apache\cordova\geolocation\NetworkListener.class \
 C:\musicmatcher\platforms\android\bin\dexedLibs\cordova-3.1.0-7f23ae987e9b785da83849b8aa9fac4b.jar \
