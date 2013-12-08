@@ -5,7 +5,7 @@ $(window).load(function() {
 $(document).ready(function(){
     $('#home').hide();
     $('#home').fadeIn(500);
-    document.body.addEventListener('touchstart', function(e){ e.preventDefault(); });
+    document.body.addEventListener('touchstart', function(e){  });
 });
 
 function addsong(){
