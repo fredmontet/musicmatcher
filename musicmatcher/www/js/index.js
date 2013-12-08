@@ -1,5 +1,5 @@
 $(window).load(function() {
-    $(document).scrollTop($('#add2').offset().top);  
+    $(document).scrollTop($('#ball').offset().top);  
 });
 
 $(document).ready(function(){
