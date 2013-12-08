@@ -1,8 +1,9 @@
 $(window).load(function() {
-      $(document).scrollTop(10000);
+    $(document).scrollTop($('#add2').offset().top);  
 });
 
 $(document).ready(function(){
+    
     $('#home').hide();
     $('#home').fadeIn(500);
 });
