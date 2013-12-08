@@ -5,6 +5,7 @@ $(window).load(function() {
 $(document).ready(function(){
     $('#home').hide();
     $('#home').fadeIn(500);
+    document.body.addEventListener('touchstart', function(e){ e.preventDefault(); });
 });
 
 function addsong(){
@@ -12,7 +13,7 @@ function addsong(){
 }
 
 function radar(){
-    $(document).scrollTop($('#add1').offset().top);
+    $(document).scrollTop($('#radar').offset().top);
 }
 /*------------------------------------- DO NO TOUCH -------------------------------------*/
 

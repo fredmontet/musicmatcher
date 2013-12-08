@@ -1,5 +1,6 @@
 $(document).ready(function(){
-    
+
+
  // Wait for device API libraries to load
  //
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -7,8 +8,9 @@ $(document).ready(function(){
  // device APIs are available
  //
     function onDeviceReady() {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    }
+        $("#addsong").click(function(){
+            ()navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        }
 
  // onSuccess Geolocation
  //
@@ -22,6 +24,8 @@ $(document).ready(function(){
                             'Heading: '            + position.coords.heading               + '<br />' +
                             'Speed: '              + position.coords.speed                 + '<br />' +
                             'Timestamp: '          + position.timestamp                    + '<br />';
+        
+        $("#radar").append(element);
     }
 
  // onError Callback receives a PositionError object
