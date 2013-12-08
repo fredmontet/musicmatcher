@@ -27,6 +27,12 @@ body{
     height: 100%;
     background-color:grey;
 }
+
+#radar{
+    height: 100%;
+    background-color: green;
+}
+
 #home {
     height:50%;
     background:#bfd70e;
