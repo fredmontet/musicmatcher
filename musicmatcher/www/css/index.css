@@ -1,12 +1,22 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
-
-/* Portrait layout (default) */
-.home {
+html{
+    height:100%;
+}
+body{
+    height:100%;
     position:relative;
-    margin-top:50%;
-    height:50px;                   /* text area height */
+    padding-top:25%;
+}
+/* Portrait layout (default) */
+#home {
+    height:50%;
+    background:#bfd70e;
+  border-radius:50%;
+  width:90%;
+  margin-left:5%;
+  
 
     text-align:center;
 }
