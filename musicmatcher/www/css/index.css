@@ -1,22 +1,37 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
+
 html{
     height:100%;
 }
+
 body{
     height:100%;
     position:relative;
-    padding-top:25%;
+    margin:0;
+    padding:0;
 }
-/* Portrait layout (default) */
+
+#add1{
+    height: 100%;
+    background-color: red;
+}
+
+#add2{
+    height: 100%;
+    background-color: blue;
+}
+
+#add3{
+    height: 100%;
+    background-color:grey;
+}
 #home {
     height:50%;
     background:#bfd70e;
-  border-radius:50%;
-  width:90%;
-  margin-left:5%;
-  
-
+    border-radius:50%;
+    width:90%;
+    margin-left:5%;
     text-align:center;
 }

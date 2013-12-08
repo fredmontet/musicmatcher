@@ -1,5 +1,12 @@
+$(window).load(function() {
+      $(document).scrollTop(10000);
+      
+});
+
 $(document).ready(function(){
-    $(".app").append($("<p>"));
+    $('#home').hide();
+    $('#home').fadeIn(500);
+   
 });
 
 /*------------------------------------- DO NO TOUCH -------------------------------------*/
