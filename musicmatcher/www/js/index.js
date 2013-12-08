@@ -13,7 +13,7 @@ function addsong(){
 }
 
 function radar(){
-    $(document).scrollTop($('#add1').offset().top);
+    $(document).scrollTop($('#radar').offset().top);
 }
 /*------------------------------------- DO NO TOUCH -------------------------------------*/
 
