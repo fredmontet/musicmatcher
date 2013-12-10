@@ -1,11 +1,12 @@
 $(window).load(function() {
-    $(document).scrollTop($('#ball').offset().top);  
+      
 });
 
 $(document).ready(function(){
+    $(document).scrollTop($('#home').offset().top);
     $('#home').hide();
     $('#home').fadeIn(500);
-    document.body.addEventListener('touchstart', function(e){ e.preventDefault(); });
+    
 });
 
 function addsong(){

@@ -1,45 +1,47 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <script type="text/javascript" src="js/jquery.js"></script>
-                <script type="text/javascript" src="js/index.js"></script>
-                <script type="text/javascript" src="js/nav.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>MusicMatcher</title>
-    </head>
-    <body>
-        <div id="add1">
-            <p>Add name</p>
-            <input type="text" name="name" placeholder="enter name..." />
-            <button onclick="next();"></button>
-            <button onclick="previous();"></button>
-        </div>
-        <div id="add2">
-            <p>Add link</p>
-            <input type="text" name="link" placeholder="enter link..." />
-            <button onclick="next();"></button>
-            <button onclick="previous();"></button>
-        </div>
-        <div id="add3">
-            <p>Add comment</p>
-            <input type="text" name="comment" placeholder="enter comment..." />
-            <button id="sendsong_button" onclick="sendsong();">Send your song</button>
-            <button onclick="previous();"></button>
-        </div>
-        <div id="home">
-            <div id="ball">
-                <form name="home">
-                    <button id="addsong_button" form="home" onclick="addsong();">Add a song</button>
-                    <button id="radar_button" form="home" onclick="radar();">Radar mode</button>
-                </form>
-            </div>
-        </div>
-        <div id="radar">
-            
-        </div>
-        
-    </body>
+<head>
+<link rel="stylesheet" href="css/jquery.mobile-1.3.2.min.css">
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery.mobile-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/nav.js"></script>
+<script type="text/javascript" src="js/index.js"></script> 
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+<div data-role="page" id="pageone" data-theme="a">
+  <div data-role="header">
+    <h1>Handshake</h1>
+  </div>
+
+  <div data-role="content">
+    <p>Welcome!</p>
+    <a href="#pagetwo">Go to Page Two</a>
+  </div>
+
+</div> 
+
+<div data-role="page" id="pagetwo" data-theme="a">
+    <div data-role="header">
+    <h1>Add song</h1>
+  </div>
+  <form id="submit" method="post" action="index.html#pagethree">
+    <div id="songname" data-role="fieldcontain">
+    <input type="text" name="songname"  placeholder="Your song name">       
+  </form>
+</div> 
+    
+<div data-role="page" id="pagethree" data-theme="a">
+    <div data-role="header">
+    <h1>Choose title</h1>
+  </div>
+  <form id="submit" method="post" action="index.html">
+    <div id="songname" data-role="fieldcontain">
+    <input type="text" name="songname"  placeholder="Your song name">       
+  </form>
+</div> 
+
+</body>
 </html>

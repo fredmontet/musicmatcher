@@ -33,15 +33,10 @@ body{
     background-color: green;
 }
 
-#home {
-    height:50%;
-    background:#bfd70e;
-    border-radius:50%;
-    width:90%;
-    margin-left:5%;
-    text-align:center;
-}
-
 p{
     margin:0;
+}
+
+#submit, #submit input{
+    text-align:center;
 }
