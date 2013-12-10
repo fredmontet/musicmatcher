@@ -4,47 +4,59 @@
 
 $(document).ready(function(){
     
-    var localhost = "KNUCHH-PC:8080"
+    var host = "http://localhost:8080"
 
-    function createMusic() {
-                $.ajax(localhost+"/content/musicmatcher/music/*", {
+
+    /*
+     * Fonction qui insere une musique dans le serveur sling
+     */
+    function createMusic(song_title, song_artist, song_url, latitude, longitude) {
+                $.ajax(host+"/content/musicmatcher/music/*", {
                     type: "POST",
                     data: {
                         "created": null,
-                        "song_title": "Get lucky",
-                        "song_artist": "Daft punk",
-                        "song_url": "http://www.youtube.com/watch?v=5NV6Rdv1a3I",
-                        "latitude": "47.015514",
-                        "longitude": "6.907135",
+                        "song_title": song_title,
+                        "song_artist": song_artist,
+                        "song_url": song_url,
+                        "latitude": latitude,
+                        "longitude": longitude,
                     },
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
                     },
                     complete: function(xhr) {
-                        listContent();
+                        console.log("musique enregistrée dans sling")
                     }
                 });
             }
             
-            function listMusic() {
-                $.ajax(localhost+"/content/musicmatcher/music.1.json", {
-                    type: "GET",
-                    complete: function(xhr) {
-                        var list = $("#list");
-                        var json = xhr.responseJSON;
-                        
-                        console.log(json);
-                        
-                        $("#list").empty();
-                        for (var key in json) {
-                            if (json[key] instanceof Object) {
-                                list.append("<div><b>" + key + "</b> : " + json[key].created + " -> " + json[key].localisation + "</div>"); 
-                            }
-                        }
-                    }
-                });
-            }
             
-            listContent();
+    /*
+     * Fonction qui list les musiques pour afficher les marker google maps
+     * afin de les afficher sur la carte des musiques.
+     */
+    function listMusic() {
+        $.ajax(host+"/content/musicmatcher/music.1.json", {
+            type: "GET",
+            complete: function(xhr) {
+                var list = $("#list");
+                var json = xhr.responseJSON;
+
+                console.log(json);
+
+                $("#list").empty();
+                for (var key in json) {
+                    if (json[key] instanceof Object) {
+
+
+                        list.append("<div><b>" + key + "</b> : " + json[key].created + " -> " + json[key].localisation + "</div>"); 
+
+
+                    }
+                }
+            }
+        });
+    }
+            
 });
                   
