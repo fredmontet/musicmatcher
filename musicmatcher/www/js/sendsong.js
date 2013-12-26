@@ -15,7 +15,7 @@ $(document).ready(function(){
     /*
      * Fonction qui insere une musique dans le serveur sling
      */
-    function createMusic(song_title, song_artist, song_url, latitude, longitude) {
+        
                 $.ajax(host+"/content/musicmatcher/music/*", {
                     type: "POST",
                     data: {
