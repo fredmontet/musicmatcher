@@ -8,18 +8,19 @@
         <script type="text/javascript" src="js/nav.js"></script>
         <script type="text/javascript" src="js/index.js"></script> 
         <script type="text/javascript" src="js/lookupsong.js"></script> 
+        <script type="text/javascript" src="js/geo.js"></script> 
         <link rel="stylesheet" href="css/index.css">
     </head>
     <body>
 
         <div data-role="page" id="pageone" data-theme="a">
             <div data-role="header">
-                <h1>Handshake</h1>
+                <h1>MusicMatcher</h1>
             </div>
 
             <div data-role="content">
-                <p>Welcome!</p>
-                <a href="#pagetwo">Go to Page Two</a>
+                <p>Welcome to MusicMatcher Motherducker!!</p>
+                <a href="#pagetwo">Do you wanna go to f*ckin' page two?</a>
             </div>
 
         </div> 
@@ -36,6 +37,7 @@
                 <div id="selectSong">
                 </div>
             </form>
+            <a href="#pagethree">I dare you to click to go to page three!</a>
         </div>
 
 
@@ -46,7 +48,7 @@
             <form id="submit" method="post" action="index.html">
                 <div id="songname" data-role="fieldcontain"></div>
                 <input type="text" name="songname"  placeholder="Your song name">    
-                <button>Next</button>
+                <button id="geolocation" onclick="getLocation()">Do you bloody wanna add this freakin' song?</button>
             </form>
         </div> 
     </body>
