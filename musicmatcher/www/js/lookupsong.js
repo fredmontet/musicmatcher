@@ -3,20 +3,45 @@
  */
 
 // Quand le DOM est charg�
-$(document).ready(function(){
 
+/*$(document).ready(function(){
+    
     // Quand on appuie sur une touche du champ artiste
-    $("#artist").on("keyup", function(){
+    $("#songname").on("click",catch_artist($("#artist")));  
+    
+    
+});
+*/
+
+function catch_artist(){
+    console.log("debut catch_artist");
+
+    var artistName = $("#artist").val();   
         
-        var artistName = $("#artist").val();   
-        
-        $.getJSON("http://ws.spotify.com/search/1/track?q=artist:"+artistName+'&callback=?', {
-            }, function(reponseAJAX){
-                if(reponseAJAX.num_results > 0){
-                    // Cr�er une nouvelle liste
+        $.getJSON("http://ws.spotify.com/search/1/track.json?q=artist:"+artistName, {
+            }, function(data){       
+                    // Creer une nouvelle liste
                     $("#selectSong").html('<select id="songs"></select>');
-                    // pour chaque sons pr�sents
-                    $.each(reponseAJAX.tracks, function(value) {
+                    
+                    //Pour chaque track
+               $.each(data.tracks, function(i, track){
+                    
+                    //test console
+                    console.log(track.name);
+                    
+                    //ajoute les options avec un titre
+                    addOption(track.name);   
+                    
+                })//each
+                
+                });//getJSON 
+                
+                /* RiZe
+                if(data.num_results > 0){
+                    // Creer une nouvelle liste
+                    $("#selectSong").html('<select id="songs"></select>');
+                    // pour chaque sons presents$.each(data.t
+                    $.each(data.tracks, function(value) {
                         // cr�e une option
                         var $currentOption = $("<option>");
 					
@@ -34,10 +59,19 @@ $(document).ready(function(){
                     // supprime la liste
                     $("#selectArtist").html('');
                 }// else
-            }); // getJSON
-    }); // #search on key up
-   
-});
+                RiZe*/
+                
+            console.log("fin catch_artist");   
+} //catch_artist
+            
+            
+
+
+function addOption(track_name){
+    var option = $("<option/>");
+    option.text(track_name);
+    $("#songs").append(option);
+}
 
 
     /**
