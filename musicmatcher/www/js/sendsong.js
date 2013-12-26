@@ -4,6 +4,11 @@
 
 $(document).ready(function(){
     
+    //Variable de connexion
+    /*
+    *   ATTENTION
+    *   A changer lors de la "mise en prod"
+    */
     var host = "http://localhost:8080"
 
 
@@ -25,7 +30,7 @@ $(document).ready(function(){
                         xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
                     },
                     complete: function(xhr) {
-                        console.log("musique enregistrée dans sling")
+                        console.log("musique enregistrée dans sling motherducker    ")
                     }
                 });
             }
