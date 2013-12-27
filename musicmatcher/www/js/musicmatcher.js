@@ -138,11 +138,11 @@ function youtube_search(song_artist, song_title){
     console.log("debut youtbe_search");
         
     //test en dur
-    var song_artist = "eminem";
+    var song_artist = localStorage.getItem('artist_name');
         
     var song_artist = encodeURIComponent(song_artist);
         
-    var song_title = "lose yourself";
+    var song_title = localStorage.getItem('track_name');
     var song_title = encodeURIComponent(song_title);
         
     $.get("https://gdata.youtube.com/feeds/api/videos?q="+song_artist+"+"+song_title+"&max-results=1&v=2&alt=jsonc", {}, 
@@ -151,7 +151,6 @@ function youtube_search(song_artist, song_title){
             var video_id = data.data.items[0].id;
             localStorage.setItem('song_url', video_id);
             console.log("id_video: "+localStorage.getItem('song_url'));
-                
         });
         
     console.log("fin youtube_search");
