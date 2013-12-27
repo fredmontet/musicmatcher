@@ -3,13 +3,7 @@
 */
 
 $(document).ready(function(){
-    
-    //Variable de connexion
-    /*
-    *   ATTENTION
-    *   A changer lors de la "mise en prod"
-    */
-    var host = "http://localhost:8080";
+        
     
 });//Document ready
 
@@ -17,23 +11,42 @@ $(document).ready(function(){
 /*
  * Fonction qui insere une musique dans le serveur sling
  */
-function send_song(song_title, song_artist, song_url, latitude, longitude){
+function send_song(){
+    
+    
+     //Variable de connexion
+    /*
+    *   ATTENTION
+    *   A changer lors de la "mise en prod"
+    */
+    var host = "http://localhost:8080";
         
     $.ajax(host+"/content/musicmatcher/music/*", {
         type: "POST",
         data: {
+            
+            /*
             "created": null,
-            "song_title": song_title,
-            "song_artist": song_artist,
-            "song_url": song_url,
-            "latitude": latitude,
-            "longitude": longitude,
+            "song_title": localStorage.getItem('song_title'),
+            "song_artist": localStorage.getItem('song_artist'),
+            "song_url": localStorage.getItem('song_url'),
+            "latitude": localStorage.getItem('latitude'),
+            "longitude": localStorage.getItem('longitude'),
+            */
+            
+            "created": null,
+            "song_title": "loudpipes",
+            "song_artist": "ratatat",
+            "song_url": "bmXumtgwtak",
+            "latitude": "46.4604679",
+            "longitude": "6.8377579",
         },
         beforeSend: function(xhr) {
             xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
+            console.log("authorisation");
         },
         complete: function(xhr) {
-            console.log("musique enregistrée dans sling motherducker    ")
+            console.log("musique enregistree dans sling motherducker")
         }
     });
         
@@ -172,6 +185,9 @@ function on_success(position) {
         
     localStorage.setItem('latitude', position.coords.latitude);
     localStorage.setItem('longitude', position.coords.longitude);
+    
+    alert("latitude: "+localStorage.getItem('latitude')+'\n'+
+        "longitude: "+localStorage.getItem('longitude'));
         
 }//on_success
     
