@@ -11,10 +11,7 @@ $(document).ready(function(){
     */
     var host = "http://localhost:8080"
     
-    
-    
 });//Document ready
-
 
 
     /*
@@ -48,6 +45,7 @@ $(document).ready(function(){
      * afin de les afficher sur la carte des musiques.
      */
     function list_music() {
+        
         $.ajax(host+"/content/musicmatcher/music.1.json", {
             type: "GET",
             complete: function(xhr) {
@@ -78,6 +76,7 @@ $(document).ready(function(){
      *   Fonction qui va chercher les titres des musiques en fonction d'un artiste
      */
     function catch_artist(){
+        
         console.log("debut catch_artist");
     
         var artistName = $("#artist").val();   
@@ -121,13 +120,13 @@ $(document).ready(function(){
     *   Fonction qui prend un nom d'artiste et une de ses musiques et retourne le premier resultat youtube
     */
     function youtube_search(artisteName, trackName){
+        
         console.log("debut youtbeSearch");
         $.get("https://gdata.youtube.com/feeds/api/videos?q="+artisteName+"+"+trackName+"&max-results=1&v=2", {
             }, function(data){  
             });
         
     }//youtubeSearch        
-
 
 
     /*
@@ -143,13 +142,18 @@ $(document).ready(function(){
     /*
     *   Fonction qui va chercher l'emplacement geogrpahique de l'utilisateur
     */
-     function getLocation() {
-                navigator.geolocation.getCurrentPosition(onSuccess, onError);
-            }
+    function get_location() {
+        
+                navigator.geolocation.getCurrentPosition(on_success, on_error);
+        
+    }//getLocation
 
-     // onSuccess Geolocation
-     //
-    function onSuccess(position) {
+
+    /*
+    *  onSuccess Geolocation
+    */ 
+    function on_success(position) {
+        
          alert('Latitude: '          + position.coords.latitude          + '\n' +
           'Longitude: '         + position.coords.longitude         + '\n');
         
@@ -158,12 +162,17 @@ $(document).ready(function(){
                             'Longitude: '          + position.coords.longitude             + '<br />';
         
         $("#radar").append(element);
-    }
+        
+    }//on_success
+    
 
-     // onError Callback receives a PositionError object
-     //
-    function onError(error) {
+     /*
+     *  on_error Callback receives a PositionError object
+     */
+    function on_error(error) {
+        
         alert('code: '    + error.code    + '\n' +
               'message: ' + error.message + '\n');
-    }
+        
+    }//on_error
 
