@@ -13,18 +13,37 @@
     </head>
     <body>
 
+        
+        <!--Menu (page 1)-->
+        <!--Sur cette page on choisi le mode avec lequel on veut utiliser musicmatcher.
+        
+        Il y a 2 modes:
+
+            - Radar
+                Permet de voir les musiques taguée sur une carte 
+
+            - Tag
+                Permet de taguer une musique à un emplacement géographique
+        -->
+        
+            
         <div data-role="page" id="pageone" data-theme="a">
             <div data-role="header">
                 <h1>MusicMatcher</h1>
             </div>
 
             <div data-role="content">
-                <p>Welcome to MusicMatcher Motherducker!!</p>
-                <a href="#pagetwo">Do you wanna go to f*ckin' page two?</a>
+                <p>Welcome to MusicMatcher</p>
+                <a href="#pagetwo">Choose your song</a>
             </div>
 
         </div> 
-
+        
+        
+        <!--Radar - Song selection (page 2)-->
+        <!--
+            l'utilisateur selectionne l'artiste et le titre de la musique qu'il veut taguer     
+        -->
         <div data-role="page" id="pagetwo" data-theme="a">
             <div data-role="header">
                 <h1>Add song</h1>
@@ -37,10 +56,15 @@
                 <div id="selectSong">
                 </div>
             </form>
-            <a href="#pagethree">I dare you to click to go to page three!</a>
+            <a href="#pagethree">Match!</a>
         </div>
+        
 
-
+        <!--Radar - Map (page 3) -->
+        <!--
+            L'utilisateur peut voir ou sa musique à été taguée, ainsi il voit le résultat de
+            ce qu'il vient de faire. (ça tangibilise son action et rend le résultat plus visible)
+        -->
         <div data-role="page" id="pagethree" data-theme="a">
             <div data-role="header">
                 <h1>Choose title</h1>
