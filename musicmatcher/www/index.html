@@ -50,17 +50,18 @@
             
             <div data-role="header">
                 <h1>Tag song</h1>
-            </div>
-            
-            <div data-role="content">
-                <form id="submit" method="post" action="index.html">
+            </div>                
+
+                <div data-role="content">
+                <form id="submit" method="post" action="index.html#tag_map">
                     <div id="songname" data-role="fieldcontain">
                         <input id="artist" type="text" name="artist" placeholder="Who's the artist?"/> 
-                        <div id="selectSong"/>
-                        <button onclick="catch_artist()">Search</button>
+                        <div id="selectSong"></div>
                     </div>
+                    <button onclick="catch_artist()">Search</button>
+                    <a href="#tag_map">Match!</a> 
                 </form>
-                <a href="#tag_map">Match!</a>
+                
                 
             </div>    
             
