@@ -15,8 +15,8 @@ $(document).ready(function(){
 
 
 /*
-     * Fonction qui insere une musique dans le serveur sling
-     */
+ * Fonction qui insere une musique dans le serveur sling
+ */
 function send_song(song_title, song_artist, song_url, latitude, longitude){
         
     $.ajax(host+"/content/musicmatcher/music/*", {
@@ -41,9 +41,9 @@ function send_song(song_title, song_artist, song_url, latitude, longitude){
             
             
 /*
-     * Liste les musiques pour afficher les marker google maps
-     * afin de les afficher sur la carte des musiques.
-     */
+ * Liste les musiques pour afficher les marker google maps
+ * afin de les afficher sur la carte des musiques.
+ */
 function list_music() {
         
     $.ajax(host+"/content/musicmatcher/music.1.json", {
@@ -71,8 +71,8 @@ function list_music() {
     
 
 /*
-     *   Fonction qui va chercher les titres des musiques en fonction d'un artiste
-     */
+ *   Fonction qui va chercher les titres des musiques en fonction d'un artiste
+ */
 function catch_artist(){
         
     console.log("debut catch_artist");
@@ -114,13 +114,15 @@ function catch_artist(){
 } //catch_artist
 
 /*
-    *   Fonction qui prend un nom d'artiste et une de ses musiques et retourne le premier resultat youtube
-    *   
-    */
+*   Fonction qui prend un nom d'artiste et une de ses musiques et retourne le premier resultat youtube
+*   
+*/
     function youtube_search(song_artist, song_title){
         console.log("debut youtbe_search");
         
+        //test en dur
         var song_artist = "eminem";
+        
         var song_artist = encodeURIComponent(song_artist);
         
         var song_title = "lose yourself";
@@ -140,8 +142,8 @@ function catch_artist(){
 
 
 /*
-     * Fonction qui peuple la drop down list des titres de musique
-     */
+ * Fonction qui peuple la drop down list des titres de musique
+ */
 /// function addOption(track_name){
 //  var option = $("<option/>");
 //option.text(track_name);
@@ -150,8 +152,8 @@ function catch_artist(){
 
 
 /*
-    *   Fonction qui va chercher l'emplacement geogrpahique de l'utilisateur
-    */
+*   Fonction qui va chercher l'emplacement geogrpahique de l'utilisateur
+*/
 function get_location() {
         
     navigator.geolocation.getCurrentPosition(on_success, on_error);
@@ -160,18 +162,12 @@ function get_location() {
 
 
 /*
-    *  onSuccess Geolocation
-    */ 
+*  onSuccess Geolocation
+*/ 
 function on_success(position) {
         
-    alert('Latitude: '          + position.coords.latitude          + '\n' +
-        'Longitude: '         + position.coords.longitude         + '\n');
-        
-    var element = document.getElementById('geolocation');
-    element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
-    'Longitude: '          + position.coords.longitude             + '<br />';
-        
-    $("#radar").append(element);
+    localStorage.setItem('latitude', position.coords.latitude);
+    localStorage.setItem('longitude', position.coords.longitude);
         
 }//on_success
     
