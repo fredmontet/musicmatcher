@@ -14,24 +14,24 @@ function catch_artist(){
         }, function(data){   
             // Creer une nouvelle liste
             $("#selectSong").html('<select id="songs"></select>');
-                    
+                        
             //Pour chaque track
             $.each(data.tracks, function(i, track){
-                // crée une option
+                // crï¿½e une option
                 var $addOption = $("<option>");
                 // Met le texte de l'option
                 $addOption.html(track.name);
-                // ajoute le nom de l'artiste et le nom du sons à l'option
+                // ajoute le nom de l'artiste et le nom du sons ï¿½ l'option
                 $addOption.data("artisteName", data.artist);
                 $addOption.data("trackName", data.name);
-                // ajoute l'option à la liste des sons
+                // ajoute l'option ï¿½ la liste des sons
                 $("#songs").append($addOption);
                     
                 //test console
           
                      
             })//each
-            // Par défaut on charge les articles le premier élément de la liste #songs
+            // Par dï¿½faut on charge les articles le premier ï¿½lï¿½ment de la liste #songs
             var $premiereOption = $("#songs").find("option").first();
             youtubeSearch( $premiereOption.data("artisteName") , $premiereOption.data("trackName") );
             // evenement sur changement de la liste des sons
