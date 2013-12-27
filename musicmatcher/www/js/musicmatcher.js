@@ -14,107 +14,106 @@ $(document).ready(function(){
 });//Document ready
 
 
-    /*
+/*
      * Fonction qui insere une musique dans le serveur sling
      */
-    function send_song(song_title, song_artist, song_url, latitude, longitude){
+function send_song(song_title, song_artist, song_url, latitude, longitude){
         
-                $.ajax(host+"/content/musicmatcher/music/*", {
-                    type: "POST",
-                    data: {
-                        "created": null,
-                        "song_title": song_title,
-                        "song_artist": song_artist,
-                        "song_url": song_url,
-                        "latitude": latitude,
-                        "longitude": longitude,
-                    },
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
-                    },
-                    complete: function(xhr) {
-                        console.log("musique enregistrée dans sling motherducker    ")
-                    }
-                });
+    $.ajax(host+"/content/musicmatcher/music/*", {
+        type: "POST",
+        data: {
+            "created": null,
+            "song_title": song_title,
+            "song_artist": song_artist,
+            "song_url": song_url,
+            "latitude": latitude,
+            "longitude": longitude,
+        },
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
+        },
+        complete: function(xhr) {
+            console.log("musique enregistrée dans sling motherducker    ")
+        }
+    });
         
-    }//send_song
+}//send_song
             
             
-    /*
+/*
      * Liste les musiques pour afficher les marker google maps
      * afin de les afficher sur la carte des musiques.
      */
-    function list_music() {
+function list_music() {
         
-        $.ajax(host+"/content/musicmatcher/music.1.json", {
-            type: "GET",
-            complete: function(xhr) {
-                var list = $("#list");
-                var json = xhr.responseJSON;
+    $.ajax(host+"/content/musicmatcher/music.1.json", {
+        type: "GET",
+        complete: function(xhr) {
+            var list = $("#list");
+            var json = xhr.responseJSON;
 
-                console.log(json);
+            console.log(json);
 
-                $("#list").empty();
-                for (var key in json) {
-                    if (json[key] instanceof Object) {
-
-
-                        list.append("<div><b>" + key + "</b> : " + json[key].created + " -> " + json[key].localisation + "</div>"); 
+            $("#list").empty();
+            for (var key in json) {
+                if (json[key] instanceof Object) {
 
 
-                    }
+                    list.append("<div><b>" + key + "</b> : " + json[key].created + " -> " + json[key].localisation + "</div>"); 
+
+
                 }
             }
-        });
+        }
+    });
         
-    }//list_music
+}//list_music
     
 
-    /*
+/*
      *   Fonction qui va chercher les titres des musiques en fonction d'un artiste
      */
-    function catch_artist(){
+function catch_artist(){
         
-        console.log("debut catch_artist");
+    console.log("debut catch_artist");
     
-        var artistName = $("#artist").val();   
+    var artistName = $("#artist").val();   
             
-        $.getJSON("http://ws.spotify.com/search/1/track.json?q=artist:"+artistName, {
-            }, function(data){   
-                // Creer une nouvelle liste
-                $("#selectSong").html('<select id="songs"></select>');
+    $.getJSON("http://ws.spotify.com/search/1/track.json?q=artist:"+artistName, {
+        }, function(data){   
+            // Creer une nouvelle liste
+            $("#selectSong").html('<select id="songs"></select>');
                             
-                //Pour chaque track
-                $.each(data.tracks, function(i, track){
-                    // cr�e une option
-                    var $addOption = $("<option>");
-                    // Met le texte de l'option
-                    $addOption.html(track.name);
-                    // ajoute le nom de l'artiste et le nom du sons � l'option
-                    $addOption.data("artisteName", data.artist);
-                    $addOption.data("trackName", data.name);
-                    // ajoute l'option � la liste des sons
-                    $("#songs").append($addOption);
-                        
+            //Pour chaque track
+            $.each(data.tracks, function(i, track){
+                // cr�e une option
+                var $addOption = $("<option>");
+                // Met le texte de l'option
+                $addOption.html(track.name);
+ 
+                // ajoute l'option � la liste des sons
+                $("#songs").append($addOption);
+                
+                    var $artist_name = track.artists[0].name
+                    
+                    var x=document.getElementById("songs").selectedIndex;
+                    var y=document.getElementById("songs").options;
+                    var $track_name = y[x].text;
+                
                     //test console
-              
-                         
-                })//each
-                // Par d�faut on charge les articles le premier �l�ment de la liste #songs
-                var $premiereOption = $("#songs").find("option").first();
-                youtube_search( $premiereOption.data("artisteName") , $premiereOption.data("trackName") );
-                // evenement sur changement de la liste des sons
-                $("#songs").on("change", function(event) {
-                    youtube_search( $("#songs option:selected").data('artisteName'), $("#songs option:selected").data('trackName') );
-                });//getJSON 
-    
-                console.log("fin catch_artist");  
-            });
+                    console.log($artist_name)
+                    console.log($track_name)
+                    
+                    localStorage.setItem('artist_name',$artist_name)
+                    localStorage.setItem('track_name',$track_name)
+
+            })//each
+            console.log("fin catch_artist");  
+        });
             
-    } //catch_artist
-    
-    
-    /*
+} //catch_artist
+
+/*
     *   Fonction qui prend un nom d'artiste et une de ses musiques et retourne le premier resultat youtube
     *   
     */
@@ -140,50 +139,50 @@ $(document).ready(function(){
     }//youtubeSearch        
 
 
-    /*
+/*
      * Fonction qui peuple la drop down list des titres de musique
      */
-       /// function addOption(track_name){
-       //  var option = $("<option/>");
-       //option.text(track_name);
-      // $("#songs").append(option);
-      // }
+/// function addOption(track_name){
+//  var option = $("<option/>");
+//option.text(track_name);
+// $("#songs").append(option);
+// }
 
 
-    /*
+/*
     *   Fonction qui va chercher l'emplacement geogrpahique de l'utilisateur
     */
-    function get_location() {
+function get_location() {
         
-                navigator.geolocation.getCurrentPosition(on_success, on_error);
+    navigator.geolocation.getCurrentPosition(on_success, on_error);
         
-    }//getLocation
+}//getLocation
 
 
-    /*
+/*
     *  onSuccess Geolocation
     */ 
-    function on_success(position) {
+function on_success(position) {
         
-         alert('Latitude: '          + position.coords.latitude          + '\n' +
-          'Longitude: '         + position.coords.longitude         + '\n');
+    alert('Latitude: '          + position.coords.latitude          + '\n' +
+        'Longitude: '         + position.coords.longitude         + '\n');
         
-        var element = document.getElementById('geolocation');
-        element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
-                            'Longitude: '          + position.coords.longitude             + '<br />';
+    var element = document.getElementById('geolocation');
+    element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
+    'Longitude: '          + position.coords.longitude             + '<br />';
         
-        $("#radar").append(element);
+    $("#radar").append(element);
         
-    }//on_success
+}//on_success
     
 
-     /*
+/*
      *  on_error Callback receives a PositionError object
      */
-    function on_error(error) {
+function on_error(error) {
         
-        alert('code: '    + error.code    + '\n' +
-              'message: ' + error.message + '\n');
+    alert('code: '    + error.code    + '\n' +
+        'message: ' + error.message + '\n');
         
-    }//on_error
+}//on_error
 
