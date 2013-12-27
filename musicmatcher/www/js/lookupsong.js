@@ -10,33 +10,41 @@ function catch_artist(){
 
     var artistName = $("#artist").val();   
         
-        $.getJSON("http://ws.spotify.com/search/1/track.json?q=artist:"+artistName, {
-            }, function(data){    
-                    // Creer une nouvelle liste
-                    $("#selectSong").html('<select id="songs"></select>');
+    $.getJSON("http://ws.spotify.com/search/1/track.json?q=artist:"+artistName, {
+        }, function(data){    
+            // Creer une nouvelle liste
+            $("#selectSong").html('<select id="songs"></select>');
                     
-                    //Pour chaque track
-               $.each(data.tracks, function(i, track){
+            //Pour chaque track
+            $.each(data.tracks, function(i, track){
+                // crée une option
+                var $addOption = $("<option>");
+                // Met le texte de l'option
+                $addOption.html(track.name);
+                // ajoute le nom de l'artiste et le nom du sons à l'option
+                $addOption.data("artisteName", data.name);
+                // ajoute l'option à la liste des sons
+                $("#songs").append($addOption);
                     
-                    //test console
-                    console.log(track.name);
+                //test console
+                console.log(track.name);
                     
-                    //ajoute les options avec un titre
-                    addOption(track.name);   
-                    
-                })//each
+                //ajoute les options avec un titre
+                addOption(track.name);                   
+            })//each
+            
+            youtubeSearch($("#songs option:selected").data('artisteName'));
+        });//getJSON 
                 
-                });//getJSON 
-                
-            console.log("fin catch_artist");   
+    console.log("fin catch_artist");   
 } //catch_artist
             
 
 /*
 * Fonction qui peuple la drop down list des titres de musique
 */
-function addOption(track_name){
-    var option = $("<option/>");
-    option.text(track_name);
-    $("#songs").append(option);
-}
+//function addOption(track_name){
+   // var option = $("<option/>");
+   // option.text(track_name);
+  //  $("#songs").append(option);
+//}
