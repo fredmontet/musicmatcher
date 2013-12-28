@@ -11,13 +11,13 @@
 /********************************************************************/
 
 
-
 /*
  * Fonction qui insere une musique dans le serveur sling
  */
 function send_song(){
     
     //Variable de connexion à Sling
+
     /*
     *   ATTENTION
     *   A changer lors de la "mise en prod"
@@ -223,8 +223,8 @@ function on_error(error) {
 /*
 *   Crée une map et positionne un marker sur celle-ci
 */
-function google_map() 
-{
+function google_map(){
+    
     // Coordonnées -> latitude + longitude -> localStorage
     var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'),localStorage.getItem('longitude'));
     
@@ -261,5 +261,6 @@ function google_map()
     google.maps.event.addListener(marker, 'click', function() {
         infowindow.open(map,marker);
     });
-}
+    
+}//google_map
 
