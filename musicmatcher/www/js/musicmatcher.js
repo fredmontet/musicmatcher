@@ -5,7 +5,7 @@
 $(document).ready(function(){
         
     
-});//Document ready
+    });//Document ready
 
 
 /*
@@ -14,7 +14,7 @@ $(document).ready(function(){
 function send_song(){
     
     
-     //Variable de connexion
+    //Variable de connexion
     /*
     *   ATTENTION
     *   A changer lors de la "mise en prod"
@@ -204,20 +204,47 @@ function on_error(error) {
         
 }//on_error
 
-function google_map() {
-  var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'),localStorage.getItem('longitude'));
-  var mapOptions = {
-    zoom: 4,
-    center: myLatlng
-  }
-  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-  var marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      title: 'Hello World!'
-  });
+function google_map() 
+{
+    // Coordonnées -> latitude + longitude -> localStorage
+    var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'),localStorage.getItem('longitude'));
+    
+    // Carte centrée sur les coordonlle zoom 1
+    var mapOptions = {
+        zoom: 10,
+        center: myLatlng
+    }
+    // Création de la carte
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    
+    // Création du Marker
+    var marker = new google.maps.Marker({
+        
+        
+        // Coordonnées 
+        position: myLatlng,
+        map: map,
+        title: 'Hello World!'
+    });
+    //contenu de la fenêtre d'informations'
+    var contentString = '<div id="content">'+
+                            '<div id="artiste">'+"Artiste: "+localStorage.getItem('artist_name')+'</div>'+
+                            '<div id="morceau">'+"Morceau: "+localStorage.getItem('track_name')+'</div>'+ 
+                        '</div>'
+                       
+  
+    //création de la fenêtre d'informations'
+    var infowindow = new google.maps.InfoWindow({
+        content: contentString
+    });
+    //affichage de la fenêtre d'information au click
+    
+    google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map,marker);
+    });
 }
+// Affichage de la fenêtre au click sur le marker
+
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
