@@ -8,7 +8,15 @@
         <script type="text/javascript" src="js/nav.js"></script>
         <script type="text/javascript" src="js/index.js"></script> 
         <script type="text/javascript" src="js/musicmatcher.js"></script> 
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
         <link rel="stylesheet" href="css/index.css">
+            <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
     </head>
     <body>
 
@@ -35,7 +43,7 @@
 
             <div data-role="content">
                 <a href="#tag_song">Tag song</a>
-                <a href="#radar">Radar</a>
+                <a href="#radar" onclick="google_map()">Radar</a>
                 <button onclick="youtube_search()">test yt_search</button>
                 <button onclick="get_location()">test location</button>
             </div>
@@ -110,5 +118,6 @@
             </div>
             
         </div> 
+        <div id="map-canvas"></div>
     </body>
 </html>
