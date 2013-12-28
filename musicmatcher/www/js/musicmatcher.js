@@ -19,10 +19,13 @@ function send_song(){
     *   ATTENTION
     *   A changer lors de la "mise en prod"
     */
-    //var host = "http://localhost:8080";
+    var host = "http://localhost:8080";
         
-    $.ajax("../proxy.php", {
+    $.ajax({
         type: "POST",
+        url: host+"/content/musicmatcher/music/*?callback=?",
+        dataType:"jsonp",
+        crossDomain:"true",
         data: {
             
             /*
