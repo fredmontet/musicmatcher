@@ -39,7 +39,7 @@ function send_song(){
             "song_artist": "ratatat",
             "song_url": "bmXumtgwtak",
             "latitude": "46.4604679",
-            "longitude": "6.8377579",
+            "longitude": "6.8377579"
         },
         beforeSend: function(xhr) {
             xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
