@@ -22,11 +22,12 @@ function send_song(){
     *   ATTENTION
     *   A changer lors de la "mise en prod"
     */
-    var host = "http://localhost:8080";
+    //var host = "http://localhost:8080/content/musicmatcher/music/";
+    //url: "./crossdomain.php",
         
     $.ajax({
         type: "POST",
-        url: host+"/content/musicmatcher/music/*",
+        url: "http://localhost:8080/content/musicmatcher/music/?callback=?",
         dataType:"jsonp",
         crossDomain:"true",
         data: {
@@ -53,8 +54,15 @@ function send_song(){
             console.log("Authorization");
             xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
         },
-        complete: function(xhr) {
+        success: function(responseData, textStatus, jqXHR) {
             console.log("Musique enregistree");
+
+        },
+        error: function (responseData, textStatus, errorThrown) {
+            alert('POST failed.');
+        },
+        complete: function(xhr) {
+            console.log("Fonction completee");
         }
     });
         
