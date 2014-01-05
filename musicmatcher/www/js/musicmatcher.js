@@ -34,7 +34,8 @@ $( document ).on( "pageinit", "#radar", function() {
 });
 
 $( document ).on( "pageinit", "#tag_song", function() {
-	catch_artist();		
+	catch_artist();	
+	catch_tracks();	
 });
 
 
@@ -223,7 +224,6 @@ function catch_artist(){
 		var text = $(this).find('.ui-link-inherit').text();
 		$(this).closest('[data-role=listview]').prev('form').find('input').val(text);
 		$(this).closest('[data-role=listview]').children().addClass('ui-screen-hidden');	
-		catch_tracks();
 	});
 	
 	console.log("fin catch_artist");
@@ -233,11 +233,9 @@ function catch_artist(){
 function catch_tracks(){
 console.log("catch_tracks");
 
-    //$( "#artist_autocomplete" ).empty();
-    
-    //$( "#artist_autocomplete" ).on( "listviewbeforefilter", function ( e, data ) {
+    $( "#tracks_autocomplete" ).on( "listviewbeforefilter", function ( e, data ) {
 		
-		var $ul = $( "#artist_autocomplete" ),
+		var $ul = $( "#tracks_autocomplete" ),
 			artist_name = localStorage.getItem('artist_name'),
 			html = "";
 			$ul.html( "" );
@@ -264,7 +262,16 @@ console.log("catch_tracks");
 					});
 			}
 			
-	//});
+	});
+	
+	$("#tracks_autocomplete").on("click", "li", function() {
+		var track_name = $(this).text();
+		localStorage.setItem('track_name',track_name);
+		console.log("track_name local storage = "+localStorage.getItem('track_name'));
+		var text = $(this).find('.ui-link-inherit').text();
+		$(this).closest('[data-role=listview]').prev('form').find('input').val(text);
+		$(this).closest('[data-role=listview]').children().addClass('ui-screen-hidden');	
+	});
 
 console.log("fin catch_tracks");	
 }//catch_tracks
