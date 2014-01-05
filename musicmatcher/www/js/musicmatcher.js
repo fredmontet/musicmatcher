@@ -10,11 +10,57 @@
 /*                                                                  */        
 /********************************************************************/
 
+//Pour que jQuery et jQuery mobile cohabite sereinement
+$.noConflict();
+
+
+function onLoad() {
+	document.addEventListener("deviceready", onDeviceReady, false);
+    console.log("onLoad");
+}
+
+function onDeviceReady() {
+// Now safe to use device APIs
+}
+
+$( document ).bind( "mobileinit", function() {
+    // Make your jQuery Mobile framework configuration changes here!
+    $.mobile.allowCrossDomainPages = true;
+});
+
+$( document ).on( "pageinit", "#radar", function() {
+		console.log("radar");
+		radar();
+});
+
+$( document ).on( "pageinit", "#tag_song", function() {
+	catch_artist();		
+});
+
+
+/*
+ * Fonction lancée lors de l'appui sur le bouton #match
+ */
+function match(){
+	console.log("match");
+                   
+    console.log(
+			"song_title : "+localStorage.getItem('song_title')+'\n'+
+			"song_artist : "+localStorage.getItem('song_artist')+'\n'+
+			"song_url : "+localStorage.getItem('song_url')+'\n'+
+			"latitude: "+localStorage.getItem('latitude')+'\n'+
+			"longitude: "+localStorage.getItem('longitude')
+			);
+
+	$.when( get_location()==true, youtube_search() ).then( send_data() );
+	
+	console.log("fin match"); 
+}//match
 
 /*
  * Fonction qui insere une musique dans le serveur sling
  */
-function send_song(){
+function send_data(){
     
     //Variable de connexion à Sling
 
@@ -24,12 +70,16 @@ function send_song(){
     */
     //var host = "http://localhost:8080/content/musicmatcher/music/";
     //url: "./crossdomain.php",
-        
+    
+    /*    
     $.ajax({
         type: "POST",
-        url: "http://localhost:8080/content/musicmatcher/music/?callback=?",
-        dataType:"jsonp",
+        url: "http://localhost:8080/content/musicmatcher/music/*",
+        dataType:"json",
+        username:"admin",
+        password:"admin",
         crossDomain:"true",
+        xhrFields: {withCredentials: true},
         data: {
             
             /*
@@ -39,7 +89,7 @@ function send_song(){
             "song_url": localStorage.getItem('song_url'),
             "latitude": localStorage.getItem('latitude'),
             "longitude": localStorage.getItem('longitude'),
-            */
+            
             
             "created": null,
 			"title": "music",
@@ -54,18 +104,46 @@ function send_song(){
             console.log("Authorization");
             xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
         },
-        success: function(responseData, textStatus, jqXHR) {
+        done: function(xhr) {
+            //responseData, textStatus, jqXHR
             console.log("Musique enregistree");
 
         },
-        error: function (responseData, textStatus, errorThrown) {
+        fail: function (xhr) {
+            //responseData, textStatus, errorThrown
             alert('POST failed.');
         },
         complete: function(xhr) {
             console.log("Fonction completee");
         }
     });
-        
+    */
+
+
+    $.ajax({
+        type: 'POST',
+        url: "http://localhost:8080/content/musicmatcher/music/*?q=?",
+        crossDomain: 'true',
+        data: {
+
+            "created": null,
+            "title": "music",
+            "description": "un noeud musique",
+            "song_title": localStorage.getItem('song_title'),
+            "song_artist": localStorage.getItem('song_artist'),
+            "song_url": localStorage.getItem('song_url'),
+            "latitude": localStorage.getItem('latitude'),
+            "longitude": localStorage.getItem('longitude'),
+
+        },
+        dataType: 'json',
+        beforeSend: function(xhr) 
+            {
+                console.log("Authorization");
+                xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
+            }
+    });
+                
 }//send_song
             
 
@@ -96,40 +174,100 @@ function list_music() {
     });
         
 }//list_music
-    
+ 
+ 
 
 /*
  *   Fonction qui va chercher les titres des musiques en fonction d'un artiste
  */
 function catch_artist(){
-        
     console.log("debut catch_artist");
     
-    var artistName = $("#artist").val();   
-            
-    $.getJSON("http://ws.spotify.com/search/1/track.json?q=artist:"+artistName, {
-        }, function(data){   
-            // Creer une nouvelle liste
-            $("#selectSong").html('<select id="songs"></select>');
-                            
-            //Pour chaque track
-            $.each(data.tracks, function(i, track){
-                // cr�e une option
-                var $addOption = $("<option>");
-                // Met le texte de l'option
-                $addOption.html(track.name);
- 
-                // ajoute l'option � la liste des sons
-                $("#songs").append($addOption);
-                
-                var $artist_name = track.artists[0].name
-                localStorage.setItem('artist_name',$artist_name);                
+    $( "#artist_autocomplete" ).on( "listviewbeforefilter", function ( e, data ) {
+		
+		var $ul = $( this ),
+			$input = $( data.input ),
+			artistName = $input.val(),
+			html = "";
+			$ul.html( "" );
+		
+			console.log("artistName = "+artistName);
+			
+			if ( artistName ) {
+					
+					$ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
+					$ul.listview( "refresh" );
+					
+					$.ajax({
+						url:"http://ws.spotify.com/search/1/artist.json?q=artist:"+artistName,
+					})
+					.then( function ( data ) {
+						console.log(data);
+											
+						$.each( data.artists, function ( i, artist ) {
+							html += "<li><a href=\"#\">" + artist.name + "</a></li>";
+						});
+						$ul.html( html );
+						$ul.listview( "refresh" );
+						$ul.trigger( "updatelayout");
 
-            })//each
-            console.log("fin catch_artist");  
-        });
-    
+					});
+			}			
+			
+	});
+	
+	$("#artist_autocomplete").on("click", "li", function() {
+		var artist_name = $(this).text();
+		localStorage.setItem('artist_name',artist_name);
+		console.log("artist_name local storage = "+localStorage.getItem('artist_name'));
+		var text = $(this).find('.ui-link-inherit').text();
+		$(this).closest('[data-role=listview]').prev('form').find('input').val(text);
+		$(this).closest('[data-role=listview]').children().addClass('ui-screen-hidden');	
+		catch_tracks();
+	});
+	
+	console.log("fin catch_artist");
 }//catch_artist
+
+
+function catch_tracks(){
+console.log("catch_tracks");
+
+    //$( "#artist_autocomplete" ).empty();
+    
+    //$( "#artist_autocomplete" ).on( "listviewbeforefilter", function ( e, data ) {
+		
+		var $ul = $( "#artist_autocomplete" ),
+			artist_name = localStorage.getItem('artist_name'),
+			html = "";
+			$ul.html( "" );
+			//console.log("artist_name = "+artist_name);
+			if ( artist_name ) {
+					
+					$ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
+					$ul.listview( "refresh" );
+					
+					$.ajax({
+						url:"http://ws.spotify.com/search/1/track.json?q=artist:"+artist_name,
+					})
+					.then( function ( data ) {
+						
+						console.log(data);
+											
+						$.each( data.tracks, function ( i, track ) {
+							html += "<li><a href=\"#\">" + track.name + "</a></li>";
+						});
+						$ul.html( html );
+						$ul.listview( "refresh" );
+						$ul.trigger( "updatelayout");
+
+					});
+			}
+			
+	//});
+
+console.log("fin catch_tracks");	
+}//catch_tracks
 
 
 /*
@@ -141,7 +279,7 @@ function save_name(){
     var x=document.getElementById("songs").selectedIndex;
     var y=document.getElementById("songs").options;
     var $track_name = y[x].text;
-    localStorage.setItem('track_name',$track_name)
+    localStorage.setItem('track_name',$track_name);
     
 }//save_name
 
@@ -150,17 +288,14 @@ function save_name(){
 *   Fonction qui prend un nom d'artiste et une de ses
 *    musiques et retourne le premier resultat youtube   
 */
-function youtube_search(song_artist, song_title){
-    
+function youtube_search(){
     console.log("debut youtbe_search");
         
-    //test en dur
     var song_artist = localStorage.getItem('artist_name');
-        
-    var song_artist = encodeURIComponent(song_artist);
+    song_artist = encodeURIComponent(song_artist);
         
     var song_title = localStorage.getItem('track_name');
-    var song_title = encodeURIComponent(song_title);
+    song_title = encodeURIComponent(song_title);
         
     $.get("https://gdata.youtube.com/feeds/api/videos?q="+song_artist+"+"+song_title+"&max-results=1&v=2&alt=jsonc", {}, 
               
@@ -171,7 +306,6 @@ function youtube_search(song_artist, song_title){
         });
         
     console.log("fin youtube_search");
-    
 }//youtubeSearch        
 
 
@@ -191,47 +325,57 @@ function add_option(track_name){
 /*
 *   Fonction qui va chercher l'emplacement geographique de l'utilisateur
 */
+
 function get_location() {
-        
+	console.log("get_location");
+	
     navigator.geolocation.getCurrentPosition(on_success, on_error);
-        
+    
+    /*
+	*   en cas de succes de get_location cette fonction met les 
+	*   coordonnees gps dans des variables localStorage dediees
+	*/ 
+	function on_success(position) {
+
+		localStorage.setItem('latitude', position.coords.latitude);
+		localStorage.setItem('longitude', position.coords.longitude);
+		
+		 console.log(
+			"latitude: "+localStorage.getItem('latitude')+'\n'+
+			"longitude: "+localStorage.getItem('longitude')
+		);
+		
+		return true;
+		console.log("success get_location");
+	}//on_success
+		
+
+	/*
+	*   Si la position n'a pas pu etre recuperee par get_location
+	*   on_error affiche un message d'alerte!
+	*/
+	function on_error(error) {
+			
+		console.log(
+			'code: '    + error.code    + '\n' +
+			'message: ' + error.message + '\n'
+		);
+		
+		return false;	
+		console.log("error get_location");
+	}//on_error
+   
+   
 }//getLocation
-
-
-/*
-*   en cas de succes de get_location cette fonction met les 
-*   coordonnees gps dans des variables localStorage dediees
-*/ 
-function on_success(position) {
-    
-    //à enlenver lors de la "mise en prod"
-    alert(
-        "latitude: "+localStorage.getItem('latitude')+'\n'+
-        "longitude: "+localStorage.getItem('longitude')
-    );
-    
-    localStorage.setItem('latitude', position.coords.latitude);
-    localStorage.setItem('longitude', position.coords.longitude);
-        
-}//on_success
-    
-
-/*
-*   Si la position n'a pas pu etre recuperee par get_location
-*   on_error affiche un message d'alerte!
-*/
-function on_error(error) {
-        
-    alert('code: '    + error.code    + '\n' +
-        'message: ' + error.message + '\n');
-        
-}//on_error
 
 
 /*
 *   Crée une map et positionne un marker sur celle-ci
 */
-function google_map(){
+function radar(){
+	console.log("radar");
+    
+    get_location();
     
     // Coordonnées -> latitude + longitude -> localStorage
     var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'),localStorage.getItem('longitude'));
@@ -240,9 +384,10 @@ function google_map(){
     var mapOptions = {
         zoom: 10,
         center: myLatlng
-    }
+    };
+    
     // Création de la carte
-    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    var map = new google.maps.Map($("#map-canvas"), mapOptions);
     
     // Création du Marker
     var marker = new google.maps.Marker({
@@ -270,5 +415,9 @@ function google_map(){
         infowindow.open(map,marker);
     });
     
+    console.log("fin radar");
 }//google_map
+
+
+
 
