@@ -17,6 +17,7 @@ $.noConflict();
 function onLoad() {
     document.addEventListener("deviceready", onDeviceReady, false);
     console.log("onLoad");
+    localStorage.clear();
 }
 
 function onDeviceReady() {
@@ -38,6 +39,9 @@ $(document).on("pageinit", "#tag_song", function() {
     catch_artist();
 });
 
+$(document).on("pageinit", "#menu", function() {
+    localStorage.clear();
+});
 
 /*
  * Fonction lancée lors de l'appui sur le bouton #match
@@ -179,7 +183,7 @@ function list_music() {
 /*
  *   Fonction qui va chercher les titres des musiques en fonction d'un artiste
  */
-function catch_artist() {
+function catch_artist() {  
     console.log("debut catch_artist");
 
     $("#artist_autocomplete").on("listviewbeforefilter", function(e, data) {
@@ -204,13 +208,13 @@ function catch_artist() {
                 console.log(data);
 
                 $.each(data.artists, function(i, artist) {
-                    html += "<li><a href=\"#\">" + artist.name + "</a></li>";
+                    html += "<li><a href=\"#\">"+artist.name+"</a></li>";
                 });
                 $ul.html(html);
                 $ul.listview("refresh");
                 $ul.trigger("updatelayout");
 
-                catch_tracks();
+                
 
             });
         }
@@ -221,9 +225,10 @@ function catch_artist() {
         var artist_name = $(this).text();
         localStorage.setItem('artist_name', artist_name);
         console.log("artist_name local storage = " + localStorage.getItem('artist_name'));
-        var text = $(this).find('.ui-link-inherit').text();
+        var text = localStorage.getItem('artist_name');
         $(this).closest('[data-role=listview]').prev('form').find('input').val(text);
         $(this).closest('[data-role=listview]').children().addClass('ui-screen-hidden');
+        catch_tracks();
     });
 
     console.log("fin catch_artist");
@@ -249,7 +254,7 @@ function catch_tracks() {
             firstletter = track.name[0];
             html += "<li firstletter=" + firstletter + "><a href=\"#\">" + track.name + "</a></li>";
 
-            function listview_sorter() {
+            /*function listview_sorter() {
                 // read all list items (without list-dividers) into an array
                 lis = $ul.children("li").not('.ui-li-divider').get();
 
@@ -275,10 +280,10 @@ function catch_tracks() {
                 });
 
                 list.listview('refresh');
-            }
+            }*/
         });
         $ul.html(html);
-        $ul.listview("refresh");
+        $ul.listview().listview('refresh');
         $ul.trigger("updatelayout");
 
     });
