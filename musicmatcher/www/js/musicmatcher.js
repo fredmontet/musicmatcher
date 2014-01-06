@@ -18,6 +18,7 @@ function onLoad() {
 	document.addEventListener("deviceready", onDeviceReady, false);
     console.log("onLoad");
     radar();
+    localStorage.clear();
 }
 
 function onDeviceReady() {
@@ -466,9 +467,9 @@ function radar(){
 	
 	localStorage.setItem('latitude', "46.4604589");
 	localStorage.setItem('longitude', "6.8377167");
+	
     
-    function map_init(){
-		// Coordonnées -> latitude + longitude -> localStorage
+    	// Coordonnées -> latitude + longitude -> localStorage
 		var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'),localStorage.getItem('longitude'));
 		
 		// Carte centrée sur les coordonées zoom 10
@@ -478,10 +479,10 @@ function radar(){
 		};
 		
 		// Création de la carte
-		var map = new google.maps.Map($("#map-canvas"), mapOptions);
+		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 		
-		return myLatlng;
-	}
+
+	
     
     // Création du Marker
     var marker = new google.maps.Marker({
@@ -492,6 +493,7 @@ function radar(){
         title: 'musicMatcher'
         
     });
+    
     //contenu de la fenêtre d'informations'
     var contentString = '<div id="content">'+
                             '<div id="artiste">'+"Artiste: "+localStorage.getItem('artist_name')+'</div>'+
