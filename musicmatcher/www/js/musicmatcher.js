@@ -30,9 +30,9 @@ $(document).bind("mobileinit", function() {
     $.mobile.allowCrossDomainPages = true;
 });
 
-$(document).on("pageinit", "#radar", function() {
-    console.log("pageInit radar");
-    $.when(get_location()).then(radar());
+$(document).on("pageshow", "#tag_map", function() {
+    console.log("pageInit tag_map");
+	$.when(get_location()).then(google.maps.event.addDomListener(window, 'load',tag_map()));
 });
 
 $(document).on("pageinit", "#tag_song", function() {
@@ -381,9 +381,9 @@ function get_location() {
 /*
  *   Crée une map et positionne un marker sur celle-ci
  */
-function radar() {
-    console.log("radar");
-
+function tag_map() {
+    console.log("tag_map");
+       
     //Variables de test à enlever...
     //localStorage.setItem('latitude', "46.4604589");
     //localStorage.setItem('longitude', "6.8377167");
@@ -393,19 +393,21 @@ function radar() {
 
     // Carte centrée sur les coordonées zoom 10
     var mapOptions = {
-        zoom: 10,
+        zoom: 15,
         center: myLatlng
     };
 
     // Création de la carte
-    var map = new google.maps.Map($("#map-canvas"), mapOptions);
+    var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
 
     // Création du Marker
     var marker = new google.maps.Marker({
         // Coordonnées 
         position: myLatlng,
         map: map,
-        title: 'musicMatcher'
+        title: 'musicMatcher',
+        visible: true
 
     });
     
@@ -420,13 +422,18 @@ function radar() {
     var infowindow = new google.maps.InfoWindow({
         content: contentString
     });
+    
+	//Affichage infowindow
+	infowindow.open(map, marker);
+    
+    /*
     //affichage de la fenêtre d'information au click
-
     google.maps.event.addListener(marker, 'click', function() {
         infowindow.open(map, marker);
     });
+    */
 
-    console.log("fin radar");
+    console.log("fin tag_map");
 }//google_map
 
 
