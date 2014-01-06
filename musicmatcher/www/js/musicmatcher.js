@@ -17,6 +17,7 @@ $.noConflict();
 function onLoad() {
 	document.addEventListener("deviceready", onDeviceReady, false);
     console.log("onLoad");
+    radar();
 }
 
 function onDeviceReady() {
@@ -29,13 +30,12 @@ $( document ).bind( "mobileinit", function() {
 });
 
 $( document ).on( "pageinit", "#radar", function() {
-		console.log("radar");
-		radar();
+		console.log("pageInit radar");
+		$.when(get_location()).then(radar());
 });
 
 $( document ).on( "pageinit", "#tag_song", function() {
 	catch_artist();	
-	catch_tracks();	
 });
 
 
@@ -211,6 +211,8 @@ function catch_artist(){
 						$ul.html( html );
 						$ul.listview( "refresh" );
 						$ul.trigger( "updatelayout");
+						
+						catch_tracks();
 
 					});
 			}			
@@ -233,6 +235,54 @@ function catch_artist(){
 function catch_tracks(){
 console.log("catch_tracks");
 
+var $ul = $( "#tracks_autocomplete" ),
+			artist_name = localStorage.getItem('artist_name'),
+			html = "";
+			$ul.html( "" );
+
+$.ajax({
+		url:"http://ws.spotify.com/search/1/track.json?q=artist:"+artist_name,
+					})
+					.then( function ( data ) {
+						
+						console.log(data);
+											
+						$.each( data.tracks, function ( i, track ) {
+							firstletter = track.name[0];
+							html += "<li firstletter="+firstletter+"><a href=\"#\">" + track.name + "</a></li>";
+							
+							function listview_sorter(){
+								// read all list items (without list-dividers) into an array
+								lis = $ul.children("li").not( '.ui-li-divider' ).get();
+								
+								// sort the list items in the array
+								lis.sort( function( a, b ) { 
+								  var valA = $( a ).text(),
+									  valB = $( b ).text();
+								   if ( valA < valB ) { return -1; }
+								   if ( valA > valB ) { return 1; }
+								   return 0;
+								});
+								
+								// clear the listview before rebuild
+								list.empty();
+								
+								// adding the ordered items to the listview
+								$.each( lis, function( i, li ) {
+								  list.append( li );
+								});
+								
+								list.listview( 'refresh' );
+							}
+						});
+						$ul.html( html );
+						$ul.listview( "refresh" );
+						$ul.trigger( "updatelayout");
+
+					});
+
+	
+/*
     $( "#tracks_autocomplete" ).on( "listviewbeforefilter", function ( e, data ) {
 		
 		var $ul = $( "#tracks_autocomplete" ),
@@ -253,17 +303,43 @@ console.log("catch_tracks");
 						console.log(data);
 											
 						$.each( data.tracks, function ( i, track ) {
-							html += "<li><a href=\"#\">" + track.name + "</a></li>";
+							firstletter = track.name[0];
+							html += "<li firstletter="+firstletter+"><a href=\"#\">" + track.name + "</a></li>";
+							
+							function listview_sorter(){
+								// read all list items (without list-dividers) into an array
+								lis = $ul.children("li").not( '.ui-li-divider' ).get();
+								
+								// sort the list items in the array
+								lis.sort( function( a, b ) { 
+								  var valA = $( a ).text(),
+									  valB = $( b ).text();
+								   if ( valA < valB ) { return -1; }
+								   if ( valA > valB ) { return 1; }
+								   return 0;
+								});
+								
+								// clear the listview before rebuild
+								list.empty();
+								
+								// adding the ordered items to the listview
+								$.each( lis, function( i, li ) {
+								  list.append( li );
+								});
+								
+								list.listview( 'refresh' );
+							}
 						});
 						$ul.html( html );
 						$ul.listview( "refresh" );
 						$ul.trigger( "updatelayout");
 
 					});
+					
 			}
-			
 	});
-	
+	*/
+		
 	$("#tracks_autocomplete").on("click", "li", function() {
 		var track_name = $(this).text();
 		localStorage.setItem('track_name',track_name);
@@ -315,7 +391,13 @@ function youtube_search(){
     console.log("fin youtube_search");
 }//youtubeSearch        
 
-
+/*
+ * Fonction qui permet de voir la video de la musique selectionnée sur youtube
+ */
+function listen(){
+	var url = "http://www.youtube.com/watch?v="+localStorage.getItem('song_url');
+	window.open(url);
+}
 /*
  * Fonction qui peuple la drop down list des titres de musique
  *
@@ -381,20 +463,25 @@ function get_location() {
 */
 function radar(){
 	console.log("radar");
+	
+	localStorage.setItem('latitude', "46.4604589");
+	localStorage.setItem('longitude', "6.8377167");
     
-    get_location();
-    
-    // Coordonnées -> latitude + longitude -> localStorage
-    var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'),localStorage.getItem('longitude'));
-    
-    // Carte centrée sur les coordonées zoom 10
-    var mapOptions = {
-        zoom: 10,
-        center: myLatlng
-    };
-    
-    // Création de la carte
-    var map = new google.maps.Map($("#map-canvas"), mapOptions);
+    function map_init(){
+		// Coordonnées -> latitude + longitude -> localStorage
+		var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'),localStorage.getItem('longitude'));
+		
+		// Carte centrée sur les coordonées zoom 10
+		var mapOptions = {
+			zoom: 10,
+			center: myLatlng
+		};
+		
+		// Création de la carte
+		var map = new google.maps.Map($("#map-canvas"), mapOptions);
+		
+		return myLatlng;
+	}
     
     // Création du Marker
     var marker = new google.maps.Marker({

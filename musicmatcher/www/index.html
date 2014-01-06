@@ -49,11 +49,7 @@
 				<a href="#radar">
 					<button>Radar</button>
 				</a>
-                
-                <!--dev
-                <button onclick="youtube_search()">test yt_search</button>
-                <button onclick="get_location()">test location</button>
-                -->
+
                 
             </div>
 
@@ -72,39 +68,13 @@
             </div>                
 
             <div data-role="content" class="jqm-content">
-				
-				<!--
-				<input id="artistInput" type="text" name="artist" placeholder="Who's the artist?"/>
-				<ul id="artistList" data-role="listview" data-inset="true"></ul>
-				-->
-				
-				<!--for autocomplete list
-				<ul id="autocomplete" data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Find an artist..." data-filter-theme="d"></ul>
-				-->
-				
-							
-                <!--
-                <form id="submit" method="post" action="index.html#tag_song">
-                    <div id="songname" data-role="fieldcontain">
+				              
+				<ul id="artist_autocomplete" data-role="listview" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Who's the artist?" data-inset="true"></ul>
+				<ul id="tracks_autocomplete" data-role="listview" data-filter="true" data-filter-reveal="true" data-filter-placeholder="What's the track?" data-inset="true"></ul>              
 
-                        <input id="artist" type="text" name="artist" placeholder="Who's the artist?"/> 
-                        
-                    </div>
-                </form>  
-                --> 
-                
-				<ul id="artist_autocomplete" data-role="listview" data-filter="true" data-filter-reveal="true" data-filter-placeholder="Who's the artist?" data-inset="true"></ul>             
-				<ul id="tracks_autocomplete" data-role="listview" data-filter="true" data-filter-reveal="true" data-filter-placeholder="What track is it?" data-inset="true"></ul>
-				
 				<a href="#tag_map">
 					<button onclick="match()">Match!</button>
-				</a>           
-                    
-                 <!--dev
-                    <button onclick="save_name()">save_name</button>
-                    <button onclick="youtube_search()">youtube_search</button>
-                 -->
-					
+				</a>           					
                 
             </div>    
             
@@ -124,6 +94,9 @@
             </div>
             
             <div data-role="content">
+				
+			<button onclick="listen()">Listen!</button>
+				
                 <!--mettre la carte google map avec l'emplacement de la musique qui vient d'être taguée-->
             </div>
             
