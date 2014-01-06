@@ -1,7 +1,7 @@
 
 /*------------------------------------- DO NO TOUCH -------------------------------------*/
 
-/*var app = {
+var app = {
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -32,8 +32,4 @@
         console.log('Received Event: ' + id);
     }
 };
-
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-*/
+app.initialize();
