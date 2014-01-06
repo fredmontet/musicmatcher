@@ -380,8 +380,8 @@ function radar() {
     console.log("radar");
 
     //Variables de test à enlever...
-    localStorage.setItem('latitude', "46.4604589");
-    localStorage.setItem('longitude', "6.8377167");
+    //localStorage.setItem('latitude', "46.4604589");
+    //localStorage.setItem('longitude', "6.8377167");
 
     // Coordonnées -> latitude + longitude -> localStorage
     var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'), localStorage.getItem('longitude'));
