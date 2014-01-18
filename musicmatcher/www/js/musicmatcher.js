@@ -32,10 +32,11 @@ $(document).bind("mobileinit", function() {
 
 $(document).on("pageshow", "#tag_map", function() {
     console.log("pageInit tag_map");
-	$.when(get_location()).then(google.maps.event.addDomListener(window, 'load',tag_map()));
+	google.maps.event.addDomListener(window, 'load',tag_map());
 });
 
 $(document).on("pageinit", "#tag_song", function() {
+	get_location();
     catch_artist();
 });
 
@@ -56,8 +57,18 @@ function match() {
             "latitude: " + localStorage.getItem('latitude') + '\n' +
             "longitude: " + localStorage.getItem('longitude')
             );
+            
+    youtube_search();
 
-    $.when(get_location() == true, youtube_search()).then(send_data());
+	if(localStorage.getItem('song_title') &&
+		localStorage.getItem('song_artist')&&
+		localStorage.getItem('song_url')&&
+		localStorage.getItem('latitude')&&
+		localStorage.getItem('longitude'))
+		{
+			send_data();
+		}
+  
 
     console.log("fin match");
 }//match
@@ -66,88 +77,24 @@ function match() {
  * Fonction qui insere une musique dans le serveur sling
  */
 function send_data() {
-
-    //Variable de connexion à Sling
-
-    /*
-     *   ATTENTION
-     *   A changer lors de la "mise en prod"
-     */
-    //var host = "http://localhost:8080/content/musicmatcher/music/";
-    //url: "./crossdomain.php",
-
-    /*    
-     $.ajax({
-     type: "POST",
-     url: "http://localhost:8080/content/musicmatcher/music/*",
-     dataType:"json",
-     username:"admin",
-     password:"admin",
-     crossDomain:"true",
-     xhrFields: {withCredentials: true},
-     data: {
-     
-     /*
-     "created": null,
-     "song_title": localStorage.getItem('song_title'),
-     "song_artist": localStorage.getItem('song_artist'),
-     "song_url": localStorage.getItem('song_url'),
-     "latitude": localStorage.getItem('latitude'),
-     "longitude": localStorage.getItem('longitude'),
-     
-     
-     "created": null,
-     "title": "music",
-     "description": "un noeud musique",
-     "song_title": "loudpipes",
-     "song_artist": "ratatat",
-     "song_url": "bmXumtgwtak",
-     "latitude": "46.4604679",
-     "longitude": "6.8377579"
-     },
-     beforeSend: function(xhr) {
-     console.log("Authorization");
-     xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
-     },
-     done: function(xhr) {
-     //responseData, textStatus, jqXHR
-     console.log("Musique enregistree");
-     
-     },
-     fail: function (xhr) {
-     //responseData, textStatus, errorThrown
-     alert('POST failed.');
-     },
-     complete: function(xhr) {
-     console.log("Fonction completee");
-     }
-     });
-     */
-
-
-    $.ajax({
-        type: 'POST',
-        url: "http://localhost:8080/content/musicmatcher/music/*?q=?",
-        crossDomain: 'true',
+	
+  $.ajax("http://localhost:8080/content/musicmatcher/music/*", {
+        type: "POST",
         data: {
             "created": null,
             "title": "music",
-            "description": "un noeud musique",
             "song_title": localStorage.getItem('song_title'),
             "song_artist": localStorage.getItem('song_artist'),
             "song_url": localStorage.getItem('song_url'),
             "latitude": localStorage.getItem('latitude'),
             "longitude": localStorage.getItem('longitude'),
         },
-        dataType: 'json',
-        beforeSend: function(xhr)
-        {
-            console.log("Authorization");
-            xhr.setRequestHeader("Authorization", "Basic " + btoa("admin:admin"));
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
         }
     });
 
-}//send_song
+}//send_data
 
 
 /*
@@ -156,7 +103,7 @@ function send_data() {
  */
 function list_music() {
 
-    $.ajax(host + "/content/musicmatcher/music.1.json", {
+    $.ajax("http://localhost:8080/content/musicmatcher/music.1.json", {
         type: "GET",
         complete: function(xhr) {
             console.log(xhr);
