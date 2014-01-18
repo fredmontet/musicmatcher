@@ -22,7 +22,7 @@ function onLoad() {
 
 function onDeviceReady() {
 // Now safe to use device APIs
-    console.log("DEVICE REAAADYYYYYYYYYYYYYYYYYYYY");
+    console.log("DEVICE READY");
 }
 
 $(document).bind("mobileinit", function() {
@@ -69,6 +69,7 @@ function send_data() {
 	
   $.ajax("http://localhost:8080/content/musicmatcher/music/*", {
         type: "POST",
+        contentType: "application/x-www-form-urlencoded; charset=iso-8859-1",
         data: {
             "created": null,
             "title": "music",
@@ -140,11 +141,12 @@ function catch_artist() {
             $.ajax({
                 url: "http://ws.spotify.com/search/1/artist.json?q=artist:" + artistName,
             })
-                    .then(function(data) {
-                console.log(data);
+				.then(function(data) {
+					console.log(data);
 
-                $.each(data.artists, function(i, artist) {
-                    html += "<li><a href=\"#\">"+artist.name+"</a></li>";
+					$.each(data.artists, function(i, artist) {
+						console.log(artist.name);
+						html += "<li><a href=\"#\">"+artist.name+"</a></li>";
                 });
                 $ul.html(html);
                 $ul.listview("refresh");
@@ -159,6 +161,7 @@ function catch_artist() {
 
     $("#artist_autocomplete").on("click", "li", function() {
         var artist_name = $(this).text();
+        artist_name = trim(artist_name);
         localStorage.setItem('artist_name', artist_name);
         console.log("artist_name local storage = " + localStorage.getItem('artist_name'));
         var text = localStorage.getItem('artist_name');
@@ -201,6 +204,7 @@ function catch_tracks() {
 
     $("#tracks_autocomplete").on("click", "li", function() {
         var track_name = $(this).text();
+        track_name = trim(track_name);
         localStorage.setItem('track_name', track_name);
         console.log("track_name local storage = " + localStorage.getItem('track_name'));
         var text = $(this).find('.ui-link-inherit').text();
@@ -349,6 +353,10 @@ function tag_map() {
 
     console.log("fin tag_map");
 }//google_map
+
+function trim (str) {
+    return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+}
 
 
 
