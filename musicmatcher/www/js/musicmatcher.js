@@ -36,44 +36,29 @@ $(document).on("pageshow", "#tag_map", function() {
 });
 
 $(document).on("pageinit", "#tag_song", function() {
-	get_location();
-    catch_artist();
+	catch_artist();
 });
 
 $(document).on("pageinit", "#menu", function() {
     localStorage.clear();
-});
-
-$(document).on("pageinit", "#radar", function() {
-    radar();
+    get_location();
 });
 
 /*
  * Fonction lancÃ©e lors de l'appui sur le bouton #match
  */
 function match() {
-    console.log("match");
-
+    console.log("match");	
     console.log(
-            "song_title : " + localStorage.getItem('song_title') + '\n' +
-            "song_artist : " + localStorage.getItem('song_artist') + '\n' +
+            "track_name : " + localStorage.getItem('track_name') + '\n' +
+            "artist_name: " + localStorage.getItem('artist_name') + '\n' +
             "song_url : " + localStorage.getItem('song_url') + '\n' +
             "latitude: " + localStorage.getItem('latitude') + '\n' +
             "longitude: " + localStorage.getItem('longitude')
             );
-            
-    youtube_search();
-
-	if(localStorage.getItem('song_title') &&
-		localStorage.getItem('song_artist')&&
-		localStorage.getItem('song_url')&&
-		localStorage.getItem('latitude')&&
-		localStorage.getItem('longitude'))
-		{
-			send_data();
-		}
+    
+    send_data();
   
-
     console.log("fin match");
 }//match
 
@@ -87,8 +72,8 @@ function send_data() {
         data: {
             "created": null,
             "title": "music",
-            "song_title": localStorage.getItem('song_title'),
-            "song_artist": localStorage.getItem('song_artist'),
+            "track_name": localStorage.getItem('track_name'),
+            "artist_name": localStorage.getItem('artist_name'),
             "song_url": localStorage.getItem('song_url'),
             "latitude": localStorage.getItem('latitude'),
             "longitude": localStorage.getItem('longitude'),
@@ -186,6 +171,9 @@ function catch_artist() {
 }//catch_artist
 
 
+/*
+ * Fonction qui cherche les titres d'un artiste et les affiches dans une liste 
+ */
 function catch_tracks() {
     console.log("catch_tracks");
 
@@ -204,34 +192,6 @@ function catch_tracks() {
         $.each(data.tracks, function(i, track) {
             firstletter = track.name[0];
             html += "<li firstletter=" + firstletter + "><a href=\"#\">" + track.name + "</a></li>";
-
-            /*function listview_sorter() {
-                // read all list items (without list-dividers) into an array
-                lis = $ul.children("li").not('.ui-li-divider').get();
-
-                // sort the list items in the array
-                lis.sort(function(a, b) {
-                    var valA = $(a).text(),
-                            valB = $(b).text();
-                    if (valA < valB) {
-                        return -1;
-                    }
-                    if (valA > valB) {
-                        return 1;
-                    }
-                    return 0;
-                });
-
-                // clear the listview before rebuild
-                list.empty();
-
-                // adding the ordered items to the listview
-                $.each(lis, function(i, li) {
-                    list.append(li);
-                });
-
-                list.listview('refresh');
-            }*/
         });
         $ul.html(html);
         $ul.listview().listview('refresh');
@@ -246,7 +206,10 @@ function catch_tracks() {
         var text = $(this).find('.ui-link-inherit').text();
         $(this).closest('[data-role=listview]').prev('form').find('input').val(text);
         $(this).closest('[data-role=listview]').children().addClass('ui-screen-hidden');
+        youtube_search();
     });
+    
+    
 
     console.log("fin catch_tracks");
 }//catch_tracks
@@ -268,7 +231,7 @@ function youtube_search() {
             function(data) {
                 var video_id = data.data.items[0].id;
                 localStorage.setItem('song_url', video_id);
-                console.log("id_video: " + localStorage.getItem('song_url'));
+                console.log("ls id_video: " + localStorage.getItem('song_url'));
             });
 
     console.log("fin youtube_search");
@@ -386,50 +349,6 @@ function tag_map() {
 
     console.log("fin tag_map");
 }//google_map
-
-
-function radar(){
-    console.log("radar");
-    
-    // les différentes coordonées GPS
-       var locations = [
-           
-      ['maPosition',(localStorage.getItem('latitude'), localStorage.getItem('longitude'))],
-      ['Neuchâtel', 46.95, 6.75],
-      ['Neuchâtel 1', 46.96, 6.75],
-      ['Neuchâtel 2', 46.97, 6.75],
-      ['Neuchâtel 3', 46.98, 6.75],
-    ];
-   
-    // Ma position actuelle
-     var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'), localStorage.getItem('longitude'));
-     
-    // création de la map centrée sur ma position 
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 15,
-      center: myLatlng
-    });
-
-    var infowindow = new google.maps.InfoWindow();
-
-    // création des markers
-    var marker, i;
-
-    for (i = 0; i < locations.length; i++) {  
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-        map: map
-      });
-
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
-    }
-    console.log("fin radar");
-}
 
 
 
