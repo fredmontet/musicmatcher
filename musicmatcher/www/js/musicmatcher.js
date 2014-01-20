@@ -313,7 +313,7 @@ function tag_map() {
     {
         stylers: [
         {
-            hue: '#000089'
+            hue: '#007dd3'
         },
 {
             visibility: 'simplified'
@@ -330,15 +330,16 @@ function tag_map() {
         elementType: 'labels',
         stylers: [
         {
-            visibility: 'off'
+            visibility: 'on'
         }
         ]
     },
+    
     {
         featureType: 'water',
         stylers: [
         {
-            color: '#000089'
+            color: '#007dd3'
         }
         ]
     }
@@ -417,7 +418,7 @@ function radar(){
     {
         stylers: [
         {
-            hue: '#000089'
+            hue: '#007dd3'
         },
 {
             visibility: 'simplified'
@@ -434,7 +435,7 @@ function radar(){
         elementType: 'labels',
         stylers: [
         {
-            visibility: 'off'
+            visibility: 'on'
         }
         ]
     },
@@ -442,7 +443,7 @@ function radar(){
         featureType: 'water',
         stylers: [
         {
-            color: '#000089'
+            color: '#007dd3'
         }
         ]
     }
