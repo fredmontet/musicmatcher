@@ -443,10 +443,20 @@ function radar(){
 							}else{
 
 								//Creation d'un tableau avec une musique
-								var music = ["Artiste: "+music_node.artist_name+" Morceau: "+music_node.track_name, music_node.latitude, music_node.longitude];
+								var music = ['<div id="content">' + 
+								'<div id="artiste">' + "Artiste: " + music_node.artist_name+ '</div>' +
+								'<div id="morceau">' + "Morceau: " + music_node.track_name + '</div>' +
+								'</div>', music_node.latitude, music_node.longitude];
+								
 								markers.push(music);
 								}	
 							});
+							
+							
+							
+
+							
+							
 							
 															
 						var locations = markers;
@@ -473,7 +483,6 @@ function radar(){
 						};
 						var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
 						map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
-						var infowindow = new google.maps.InfoWindow();
 
 						var infowindow = new google.maps.InfoWindow();
 
