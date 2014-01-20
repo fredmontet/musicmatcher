@@ -368,7 +368,7 @@ function radar(){
     
     // les diff?rentes coordon?es GPS
        var locations = [
-          
+      ['MaPosition', (localStorage.getItem('latitude'), localStorage.getItem('longitude'))],   
       ['Neuchâtel', 46.95, 6.75],
       ['Neuchâtel 1', 46.96, 6.75],
       ['Neuchâtel 2', 46.97, 6.75],
