@@ -21,7 +21,7 @@ function onLoad() {
 }
 
 function onDeviceReady() {
-// Now safe to use device APIs
+    // Now safe to use device APIs
     console.log("DEVICE READY");
 }
 
@@ -32,11 +32,11 @@ $(document).bind("mobileinit", function() {
 
 $(document).on("pageshow", "#tag_map", function() {
     console.log("pageInit tag_map");
-	google.maps.event.addDomListener(window, 'load',tag_map());
+    google.maps.event.addDomListener(window, 'load',tag_map());
 });
 
 $(document).on("pageinit", "#tag_song", function() {
-	catch_artist();
+    catch_artist();
 });
 
 $(document).on("pageinit", "#menu", function() {
@@ -46,7 +46,7 @@ $(document).on("pageinit", "#menu", function() {
 
 $(document).on("pageinit", "#radar", function() {
     radar();
- });
+});
 
 
 /*
@@ -55,12 +55,12 @@ $(document).on("pageinit", "#radar", function() {
 function match() {
     console.log("match");	
     console.log(
-            "track_name : " + localStorage.getItem('track_name') + '\n' +
-            "artist_name: " + localStorage.getItem('artist_name') + '\n' +
-            "song_url : " + localStorage.getItem('song_url') + '\n' +
-            "latitude: " + localStorage.getItem('latitude') + '\n' +
-            "longitude: " + localStorage.getItem('longitude')
-            );
+        "track_name : " + localStorage.getItem('track_name') + '\n' +
+        "artist_name: " + localStorage.getItem('artist_name') + '\n' +
+        "song_url : " + localStorage.getItem('song_url') + '\n' +
+        "latitude: " + localStorage.getItem('latitude') + '\n' +
+        "longitude: " + localStorage.getItem('longitude')
+        );
     
     send_data();
   
@@ -72,7 +72,7 @@ function match() {
  */
 function send_data() {
 	
-  $.ajax("http://localhost:8080/content/musicmatcher/music/*", {
+    $.ajax("http://localhost:8080/content/musicmatcher/music/*", {
         type: "POST",
         data: {
             "created": null,
@@ -100,9 +100,9 @@ function catch_artist() {
     $("#artist_autocomplete").on("listviewbeforefilter", function(e, data) {
 
         var $ul = $(this),
-                $input = $(data.input),
-                artistName = $input.val(),
-                html = "";
+        $input = $(data.input),
+        artistName = $input.val(),
+        html = "";
         $ul.html("");
 
         console.log("artistName = " + artistName);
@@ -115,12 +115,12 @@ function catch_artist() {
             $.ajax({
                 url: "http://ws.spotify.com/search/1/artist.json?q=artist:" + artistName,
             })
-				.then(function(data) {
-					console.log(data);
+            .then(function(data) {
+                console.log(data);
 
-					$.each(data.artists, function(i, artist) {
-						console.log(artist.name);
-						html += "<li><a href=\"#\">"+artist.name+"</a></li>";
+                $.each(data.artists, function(i, artist) {
+                    console.log(artist.name);
+                    html += "<li><a href=\"#\">"+artist.name+"</a></li>";
                 });
                 $ul.html(html);
                 $ul.listview("refresh");
@@ -155,14 +155,14 @@ function catch_tracks() {
     console.log("catch_tracks");
 
     var $ul = $("#tracks_autocomplete"),
-            artist_name = localStorage.getItem('artist_name'),
-            html = "";
+    artist_name = localStorage.getItem('artist_name'),
+    html = "";
     $ul.html("");
 
     $.ajax({
         url: "http://ws.spotify.com/search/1/track.json?q=artist:" + artist_name,
     })
-            .then(function(data) {
+    .then(function(data) {
 
         console.log(data);
 
@@ -206,11 +206,11 @@ function youtube_search() {
     song_title = encodeURIComponent(song_title);
 
     $.get("https://gdata.youtube.com/feeds/api/videos?q=" + song_artist + "+" + song_title + "&max-results=1&v=2&alt=jsonc", {},
-            function(data) {
-                var video_id = data.data.items[0].id;
-                localStorage.setItem('song_url', video_id);
-                console.log("ls id_video: " + localStorage.getItem('song_url'));
-            });
+        function(data) {
+            var video_id = data.data.items[0].id;
+            localStorage.setItem('song_url', video_id);
+            console.log("ls id_video: " + localStorage.getItem('song_url'));
+        });
 
     console.log("fin youtube_search");
 }//youtubeSearch        
@@ -242,9 +242,9 @@ function get_location() {
         localStorage.setItem('longitude', position.coords.longitude);
 
         console.log(
-                "latitude: " + localStorage.getItem('latitude') + '\n' +
-                "longitude: " + localStorage.getItem('longitude')
-                );
+            "latitude: " + localStorage.getItem('latitude') + '\n' +
+            "longitude: " + localStorage.getItem('longitude')
+            );
 
         return true;
         console.log("success get_location");
@@ -258,9 +258,9 @@ function get_location() {
     function on_error(error) {
 
         console.log(
-                'code: ' + error.code + '\n' +
-                'message: ' + error.message + '\n'
-                );
+            'code: ' + error.code + '\n' +
+            'message: ' + error.message + '\n'
+            );
 
         return false;
         console.log("error get_location");
@@ -273,8 +273,46 @@ function get_location() {
 /*
  *   Crée une map et positionne un marker sur celle-ci
  */
+
 function tag_map() {
+    var map;
+    var MY_MAPTYPE_ID = 'custom_style';
     console.log("tag_map");
+    var featureOpts = [
+    {
+        stylers: [
+        {
+            hue: '#007dd3'
+        },
+{
+            visibility: 'simplified'
+        },
+{
+            gamma: 0.5
+        },
+{
+            weight: 0.5
+        }
+        ]
+    },
+    {
+        elementType: 'labels',
+        stylers: [
+        {
+            visibility: 'on'
+        }
+        ]
+    },
+    
+    {
+        featureType: 'water',
+        stylers: [
+        {
+            color: '#007dd3'
+        }
+        ]
+    }
+    ];
        
     //Variables de test à enlever...
     //localStorage.setItem('latitude', "46.4604589");
@@ -286,13 +324,21 @@ function tag_map() {
     // Carte centrée sur les coordonées zoom 10
     var mapOptions = {
         zoom: 15,
-        center: myLatlng
+        center: myLatlng,
+        mapTypeControlOptions: {
+            mapTypeIds: [google.maps.MapTypeId.ROADMAP, MY_MAPTYPE_ID]
+        },
+        mapTypeId: MY_MAPTYPE_ID
     };
 
     // Création de la carte
-    var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-
+    var styledMapOptions = {
+        name: 'Custom Style'
+    };
+    var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+    map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
     // Création du Marker
     var marker = new google.maps.Marker({
         // Coordonnées 
@@ -305,9 +351,9 @@ function tag_map() {
     
     //contenu de la fenêtre d'informations'
     var contentString = '<div id="content">' +
-            '<div id="artiste">' + "Artiste: " + localStorage.getItem('artist_name') + '</div>' +
-            '<div id="morceau">' + "Morceau: " + localStorage.getItem('track_name') + '</div>' +
-            '</div>'
+    '<div id="artiste">' + "Artiste: " + localStorage.getItem('artist_name') + '</div>' +
+    '<div id="morceau">' + "Morceau: " + localStorage.getItem('track_name') + '</div>' +
+    '</div>'
 
 
     //création de la fenêtre d'informations'
@@ -315,8 +361,8 @@ function tag_map() {
         content: contentString
     });
     
-	//Affichage infowindow
-	infowindow.open(map, marker);
+    //Affichage infowindow
+    infowindow.open(map, marker);
     
     /*
     //affichage de la fenêtre d'information au click
@@ -337,19 +383,48 @@ function trim (str) {
 }
 
 
-/*
- * Liste les musiques pour afficher les marker google maps
- * afin de les afficher sur la carte des musiques.
- */ 
-function marker_list() {
-	
-	
-                    			    
-}//marker_list
-
-
 function radar(){
-   console.log("radar");
+		   console.log("radar");
+					 
+					var map;
+					
+					var MY_MAPTYPE_ID = 'custom_style';
+					
+					var featureOpts = [
+					{
+						stylers: [
+						{
+							hue: '#007dd3'
+						},
+				{
+							visibility: 'simplified'
+						},
+				{
+							gamma: 0.5
+						},
+				{
+							weight: 0.5
+						}
+						]
+					},
+					{
+						elementType: 'labels',
+						stylers: [
+						{
+							visibility: 'on'
+						}
+						]
+					},
+					{
+						featureType: 'water',
+						stylers: [
+						{
+							color: '#007dd3'
+						}
+						]
+					}
+					];
+
 
 			var markers = [['MaPosition', localStorage.getItem('latitude'), localStorage.getItem('longitude')]];
 			
@@ -373,20 +448,32 @@ function radar(){
 								}	
 							});
 							
-					
-										
+															
 						var locations = markers;
 						console.log("locations Oh yeah: "+markers);
 							
 							
 						// Ma position actuelle
 						var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'), localStorage.getItem('longitude'));
+						
+						// Carte centrée sur les coordonées zoom 15
+						var mapOptions = {
+							zoom: 15,
+							center: myLatlng,
+							mapTypeControlOptions: {
+								mapTypeIds: [google.maps.MapTypeId.ROADMAP, MY_MAPTYPE_ID]
+							},
+							mapTypeId: MY_MAPTYPE_ID
+						};
 							 
-						// creation de la map centr?e sur ma position 
-						var map = new google.maps.Map(document.getElementById('map'), {
-						  zoom: 15,
-						  center: myLatlng
-						});
+						// cr?ation de la map centr?e sur ma position 
+						var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+						var styledMapOptions = {
+							name: 'Custom Style'
+						};
+						var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+						map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
+						var infowindow = new google.maps.InfoWindow();
 
 						var infowindow = new google.maps.InfoWindow();
 
