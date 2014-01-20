@@ -50,7 +50,7 @@ $(document).on("pageinit", "#radar", function() {
 
 
 /*
- * Fonction lanc√©e lors de l'appui sur le bouton #match
+ * Fonction lancee lors de l'appui sur le bouton #match
  */
 function match() {
     console.log("match");	
@@ -74,7 +74,6 @@ function send_data() {
 	
   $.ajax("http://localhost:8080/content/musicmatcher/music/*", {
         type: "POST",
-        contentType: "application/x-www-form-urlencoded; charset=iso-8859-1",
         data: {
             "created": null,
             "title": "music",
@@ -90,36 +89,6 @@ function send_data() {
     });
 
 }//send_data
-
-
-/*
- * Liste les musiques pour afficher les marker google maps
- * afin de les afficher sur la carte des musiques.
- */
-function list_music() {
-
-    $.ajax("http://localhost:8080/content/musicmatcher/music.1.json", {
-        type: "GET",
-        complete: function(xhr) {
-            console.log(xhr);
-            var list = $("#list");
-            var json = xhr.responseJSON;
-
-            console.log(json);
-
-            $("#list").empty();
-            for (var key in json) {
-                if (json[key] instanceof Object) {
-
-                    list.append("<div><b>" + json[key].song_artist + "</b> : " + json[key].song_title + " -> " + json[key].song_url + "</div>");
-
-                }
-            }
-        }
-    });
-
-}//list_music
-
 
 
 /*
@@ -359,53 +328,100 @@ function tag_map() {
     console.log("fin tag_map");
 }//google_map
 
+
+/*
+ *	Fonction pour enlever l'espace d'origine inconnue ‡ la fin des variable localstorage 
+ */
 function trim (str) {
     return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 }
 
+
+/*
+ * Liste les musiques pour afficher les marker google maps
+ * afin de les afficher sur la carte des musiques.
+ */ 
+function marker_list() {
+	
+	
+                    			    
+}//marker_list
+
+
 function radar(){
    console.log("radar");
-    
-    // les diff?rentes coordon?es GPS
-       var locations = [
-      ['MaPosition', (localStorage.getItem('latitude'), localStorage.getItem('longitude'))],   
-      ['Neuch‚tel', 46.95, 6.75],
-      ['Neuch‚tel 1', 46.96, 6.75],
-      ['Neuch‚tel 2', 46.97, 6.75],
-      ['Neuch‚tel 3', 46.98, 6.75],
-    ];
-   
-    // Ma position actuelle
-     var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'), localStorage.getItem('longitude'));
-     
-    // cr?ation de la map centr?e sur ma position 
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 15,
-      center: myLatlng
-    });
 
-    var infowindow = new google.maps.InfoWindow();
+			var markers = [['MaPosition', localStorage.getItem('latitude'), localStorage.getItem('longitude')]];
+			
+				$.ajax({
+					url:"http://localhost:8080/content/musicmatcher/music.1.json",
+					type: "GET",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader ("Authorization", "Basic " + btoa("admin:admin"));
+					}
+				})
+				.then(function(data) {  
+						
+						$.each(data, function(i, music_node) {
+							if( i == "jcr:createdBy" || i == "jcr:created" || i == "jcr:primaryType"){
+								return true;
+							}else{
 
-    // cr?ation des markers
-    var marker, i;
+								//Creation d'un tableau avec une musique
+								var music = ["Artiste: "+music_node.artist_name+" Morceau: "+music_node.track_name, music_node.latitude, music_node.longitude];
+								markers.push(music);
+								}	
+							});
+							
+					
+										
+						var locations = markers;
+						console.log("locations Oh yeah: "+markers);
+							
+							
+						// Ma position actuelle
+						var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'), localStorage.getItem('longitude'));
+							 
+						// creation de la map centr?e sur ma position 
+						var map = new google.maps.Map(document.getElementById('map'), {
+						  zoom: 15,
+						  center: myLatlng
+						});
 
-    for (i = 0; i < locations.length; i++) {  
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-        map: map
-      });
+						var infowindow = new google.maps.InfoWindow();
 
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
-    }
-    console.log("fin radar");
+						// cr?ation des markers
+						var marker, i;
+
+						for (i = 0; i < locations.length; i++) {  
+							
+							marker = new google.maps.Marker({
+								position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+								map: map
+							});
+
+							google.maps.event.addListener(marker, 'click', (function(marker, i) {
+								return function() {
+									infowindow.setContent(locations[i][0]);
+									infowindow.open(map, marker);
+								}
+							})(marker, i));
+							
+						}   						
+				});	
+
+			
+   console.log("fin radar");
 }
 
-
-
+/* les diff?rentes coordon?es GPS
+		   var locations = [
+		  ['MaPosition', (localStorage.getItem('latitude'), localStorage.getItem('longitude'))],   
+		  ['Neuch‚tel', 46.95, 6.75],
+		  ['Neuch‚tel 1', 46.96, 6.75],
+		  ['Neuch‚tel 2', 46.97, 6.75],
+		  ['Neuch‚tel 3', 46.98, 6.75],
+		];
+		*/
 
 
