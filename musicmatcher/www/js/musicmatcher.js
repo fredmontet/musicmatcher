@@ -304,8 +304,45 @@ function get_location() {
 /*
  *   Crée une map et positionne un marker sur celle-ci
  */
+
 function tag_map() {
+    var map;
+    var MY_MAPTYPE_ID = 'custom_style';
     console.log("tag_map");
+    var featureOpts = [
+    {
+        stylers: [
+        {
+            hue: '#000089'
+        },
+{
+            visibility: 'simplified'
+        },
+{
+            gamma: 0.5
+        },
+{
+            weight: 0.5
+        }
+        ]
+    },
+    {
+        elementType: 'labels',
+        stylers: [
+        {
+            visibility: 'off'
+        }
+        ]
+    },
+    {
+        featureType: 'water',
+        stylers: [
+        {
+            color: '#000089'
+        }
+        ]
+    }
+    ];
        
     //Variables de test à enlever...
     //localStorage.setItem('latitude', "46.4604589");
@@ -317,13 +354,21 @@ function tag_map() {
     // Carte centrée sur les coordonées zoom 10
     var mapOptions = {
         zoom: 15,
-        center: myLatlng
+        center: myLatlng,
+        mapTypeControlOptions: {
+            mapTypeIds: [google.maps.MapTypeId.ROADMAP, MY_MAPTYPE_ID]
+        },
+        mapTypeId: MY_MAPTYPE_ID
     };
 
     // Création de la carte
-    var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+    map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-
+    var styledMapOptions = {
+        name: 'Custom Style'
+    };
+    var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+    map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
     // Création du Marker
     var marker = new google.maps.Marker({
         // Coordonnées 
@@ -365,7 +410,43 @@ function trim (str) {
 
 function radar(){
     console.log("radar");
-    
+        var map;
+    var MY_MAPTYPE_ID = 'custom_style';
+    console.log("tag_map");
+    var featureOpts = [
+    {
+        stylers: [
+        {
+            hue: '#000089'
+        },
+{
+            visibility: 'simplified'
+        },
+{
+            gamma: 0.5
+        },
+{
+            weight: 0.5
+        }
+        ]
+    },
+    {
+        elementType: 'labels',
+        stylers: [
+        {
+            visibility: 'off'
+        }
+        ]
+    },
+    {
+        featureType: 'water',
+        stylers: [
+        {
+            color: '#000089'
+        }
+        ]
+    }
+    ];
     // les diff?rentes coordon?es GPS
     var locations = [ 
     ['Neuch�tel', 46.95, 6.75],
@@ -380,12 +461,20 @@ function radar(){
     // Carte centrée sur les coordonées zoom 15
     var mapOptions = {
         zoom: 15,
-        center: myLatlng
+        center: myLatlng,
+        mapTypeControlOptions: {
+            mapTypeIds: [google.maps.MapTypeId.ROADMAP, MY_MAPTYPE_ID]
+        },
+        mapTypeId: MY_MAPTYPE_ID
     };
     // cr?ation de la map centr?e sur ma position 
-   var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-   var infowindow = new google.maps.InfoWindow();
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    var styledMapOptions = {
+        name: 'Custom Style'
+    };
+    var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+    map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
+    var infowindow = new google.maps.InfoWindow();
 
     // cr?ation des markers
     var marker, i;
