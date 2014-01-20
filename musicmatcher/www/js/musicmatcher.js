@@ -44,6 +44,11 @@ $(document).on("pageinit", "#menu", function() {
     get_location();
 });
 
+$(document).on("pageinit", "#radar", function() {
+    radar();
+ });
+
+
 /*
  * Fonction lanc√©e lors de l'appui sur le bouton #match
  */
@@ -357,6 +362,49 @@ function tag_map() {
 function trim (str) {
     return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 }
+
+function radar(){
+   console.log("radar");
+    
+    // les diff?rentes coordon?es GPS
+       var locations = [
+          
+      ['Neuch‚tel', 46.95, 6.75],
+      ['Neuch‚tel 1', 46.96, 6.75],
+      ['Neuch‚tel 2', 46.97, 6.75],
+      ['Neuch‚tel 3', 46.98, 6.75],
+    ];
+   
+    // Ma position actuelle
+     var myLatlng = new google.maps.LatLng(localStorage.getItem('latitude'), localStorage.getItem('longitude'));
+     
+    // cr?ation de la map centr?e sur ma position 
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 15,
+      center: myLatlng
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    // cr?ation des markers
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+    console.log("fin radar");
+}
+
 
 
 
